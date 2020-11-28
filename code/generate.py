@@ -30,13 +30,9 @@ class MallowsSample:
             ndarray
                 The top-lists generated
         """
-        sample = []
-        print(k_distribution)
-        for k, freq in k_distribution.items():
-            for ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0):
-                sample.append(ranking[ranking is not np.nan])
-
-        return np.array(sample)
+        return np.array([ranking for 
+                k, freq in k_distribution.items() for 
+                    ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0)])
 
     """This class represents a single sample generated from a
     Mallows Models adapted to top-k rankings given a parameter of dispersion
@@ -62,9 +58,9 @@ class MallowsSample:
     """
     def __init__(self,n,k_distribution,theta=None,phi=None,s0=None):
         self.n = n
-        self.theta = theta
-        self.phi = phi
-        self.s0 = s0
+        self.theta, self.phi = mk.check_theta_phi(theta, phi)
+        self.s0 = np.array(range(n)) if s0 is None else s0
+        print(f"k_distribution:{k_distribution.items()}")
         self.sample = self.topListSample(n,k_distribution,theta,phi,s0)
 
     sampleType = "Mallows"
@@ -73,15 +69,17 @@ class MallowsSample:
         return f"{self.sampleType}_candidates-{self.n}_theta-{self.theta}_phi-{self.phi}"
 
     def __str__(self):
-        return (self.label() +
-                "Rankings: " + np.array_str(self.sample) + "\n" +
-                "Consensus Ranking: " + {np.array_str(self.s0)} + "\n"
+        return (self.label() + "\n"
+                "Rankings:\n" + np.array_str(self.sample) + "\n" +
+                "Consensus Ranking: " + np.array_str(self.s0) + "\n"
                 )
 
     def toCSV(self):
-        np.savetxt(self.label(), self.sample, ",")
+        np.savetxt(self.label() + ".csv", self.sample, delimiter=",")
 
 class MallowsSampleTopK(MallowsSample):
+    sampleType = "Mallows_Top-K"
+
     """This class represents a sample of m top-k-lists sampled from a
     Mallows Models adapted to top-k rankings given a parameter of dispersion
     (theta or phi).
@@ -115,8 +113,6 @@ class MallowsSampleTopK(MallowsSample):
     def label(self):
         return super().label() + f"_k-{self.k}"
 
-sampleType = "Mallows_Top-K"
-
 class MallowsSamplePoisson(MallowsSample):
     sampleType = "Mallows_Poisson"
 
@@ -139,15 +135,15 @@ class MallowsSamplePoisson(MallowsSample):
         rng = np.random.default_rng()
         # Samples are drawn repeatedly until enough values
         # reside in [lower,upper]
+        sampleSize = m
         while True:
-            s = rng.poisson(lda, m)
-            s = s[s <= upper]
-            s = s[s >= lower]
-            if len(s) >= n:
-                return s[:n]
+            sample = rng.poisson(lda, sampleSize)
+            sample = sample[(sample <= upper) & (sample >= lower)]
+            if len(sample) >= m:
+                return sample[:m]
             # Double the number of values sampled each time to
             # increase the chance that sufficient values lay in [lower,upper]
-            m *= 2
+            sampleSize *= 2
 
     """This class represents a single sample generated from
         a Mallows Models adapted to top-k rankings given a parameter of dispersion
@@ -195,21 +191,20 @@ class MallowsSamplePoisson(MallowsSample):
 # Note: Primarily for testing and debugging.
 if __name__ == '__main__':
     # General Sample parameters
-    m = 20
+    m = 4
     n = 10
-    thetas = (0, .1)
+    thetas = (.01, .1)
 
     # List of all samples
     allSamples = []
 
-    # Samples of top-5-lists
     k = 5
-    for theta in thetas:
-        allSamples.append(MallowsSampleTopK(m,n,k,theta))
-
-    # Samples of top-lists with lengths sampled from Poisson distribution
     lda = 3
     for theta in thetas:
+         # Samples of top-5-lists
+        allSamples.append(MallowsSampleTopK(m,n,k,theta))
+
+        # Samples of top-lists with lengths sampled from Poisson distribution
         allSamples.append(MallowsSamplePoisson(m,n,lda,theta))
 
     for sample in allSamples:
