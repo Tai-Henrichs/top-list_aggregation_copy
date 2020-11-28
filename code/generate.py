@@ -80,7 +80,7 @@ def poissonSample(m, lower = 0, upper = float('inf'), lda):
     rng = np.random.default_rng()
     # Samples are drawn repeatedly until enough values
     # reside in [lower,upper]
-    while true:
+    while True:
         s = rng.poisson(lda, m)
         s = np.where(lower <= s <= upper)
         if len(s) >= n:
