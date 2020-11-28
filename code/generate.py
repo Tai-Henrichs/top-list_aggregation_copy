@@ -30,7 +30,7 @@ class MallowsSample:
             list
                 The top-lists generated
         """
-        return [tuple(ranking) for 
+        return [tuple(ranking[~np.isnan(ranking)]) for 
                 k, freq in k_distribution.items() for 
                     ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0)]
 
@@ -195,12 +195,12 @@ class MallowsSamplePoisson(MallowsSample):
 # Note: Primarily for testing and debugging.
 if __name__ == '__main__':
     # General Sample parameters
-    m = 4
+    m = 20
     n = 10
     thetas = (.01, .1)
 
     k = 5
-    lda = 3
+    lda = 2
     for theta in thetas:
          # Samples of top-5-lists
         print(MallowsSampleTopK(m,n,k,theta))
