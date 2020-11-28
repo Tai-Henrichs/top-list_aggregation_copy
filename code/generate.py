@@ -27,12 +27,12 @@ class MallowsSample:
                 The consensus ranking. The identity ranking by default.
             Returns
             -------
-            ndarray
+            list
                 The top-lists generated
         """
-        return np.array([ranking for 
+        return [tuple(ranking) for 
                 k, freq in k_distribution.items() for 
-                    ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0)])
+                    ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0)]
 
     """This class represents a single sample generated from a
     Mallows Models adapted to top-k rankings given a parameter of dispersion
@@ -60,22 +60,23 @@ class MallowsSample:
         self.n = n
         self.theta, self.phi = mk.check_theta_phi(theta, phi)
         self.s0 = np.array(range(n)) if s0 is None else s0
-        print(f"k_distribution:{k_distribution.items()}")
-        self.sample = self.topListSample(n,k_distribution,theta,phi,s0)
+        self.sample = Counter(self.topListSample(n,k_distribution,theta,phi,s0))
 
     sampleType = "Mallows"
 
     def label(self):
-        return f"{self.sampleType}_candidates-{self.n}_theta-{self.theta}_phi-{self.phi}"
+        precision = 2
+        return (f"{self.sampleType}_"
+                f"candidates-{self.n}_"
+                f"theta-{self.theta:.{precision}f}_"
+                f"phi-{self.phi:.{precision}f}"
+                )
 
     def __str__(self):
         return (self.label() + "\n"
-                "Rankings:\n" + np.array_str(self.sample) + "\n" +
+                f"Rankings:\n{self.sample}\n"
                 "Consensus Ranking: " + np.array_str(self.s0) + "\n"
                 )
-
-    def toCSV(self):
-        np.savetxt(self.label() + ".csv", self.sample, delimiter=",")
 
 class MallowsSampleTopK(MallowsSample):
     sampleType = "Mallows_Top-K"
@@ -195,18 +196,11 @@ if __name__ == '__main__':
     n = 10
     thetas = (.01, .1)
 
-    # List of all samples
-    allSamples = []
-
     k = 5
     lda = 3
     for theta in thetas:
          # Samples of top-5-lists
-        allSamples.append(MallowsSampleTopK(m,n,k,theta))
+        print(MallowsSampleTopK(m,n,k,theta))
 
         # Samples of top-lists with lengths sampled from Poisson distribution
-        allSamples.append(MallowsSamplePoisson(m,n,lda,theta))
-
-    for sample in allSamples:
-        print(sample)
-        sample.toCSV()
+        print(MallowsSamplePoisson(m,n,lda,theta))
