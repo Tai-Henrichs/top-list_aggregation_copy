@@ -72,6 +72,9 @@ class MallowsSample:
         return label(self) + "\n" + "Rankings: " + np.array_str(sample) + "\n" +
                 "Consensus Ranking: " + np.array_str(s0)
 
+    def toCSV(self):
+        np.savetxt(label(self), sample, delimeter=",")
+
 class MallowsSampleTopK(MallowsSample):
       """This class represents a sample of m top-k-lists sampled from a
         Mallows Models adapted to top-k rankings given a parameter of dispersion
@@ -183,10 +186,22 @@ class MallowsSamplePoisson(MallowsSample):
 # their lengths sampled from a Poisson distribution.
 # Note: Primarily for testing and debugging.
 if __name__ == '__main__':
+    # General Sample parameters
     m = 20
     n = 10
-    thetas = [0, .1]
+    thetas = (0, .1)
 
+    # List of all samples
+    allSamples = []
+
+    # Samples of top-5-lists
     for theta in thetas:
-        np.savetxt("Theta=%d_top-%d-lists"
-            topListSample(n,{5 : m},theta=None,phi=None,s0=None))
+        allSamples.append(MallowsSampleTopK(m,n,5,theta))
+
+    # Samples of top-lists with lengths sampled from Poisson distribution
+    for theta in thetas:
+        allSamples.append(MallowsSampleTopK(m,n,5,theta))
+
+    for sample in allSamples:
+        print(sample.str())
+        sample.toCSV()
