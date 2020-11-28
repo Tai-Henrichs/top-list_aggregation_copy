@@ -120,7 +120,7 @@ class MallowsSampleTopK(MallowsSample):
 class MallowsSamplePoisson(MallowsSample):
     sampleType = "Mallows_Poisson"
 
-    def poissonSample(self,m,lda,lower = 0,upper = float('inf')):
+    def poissonSample(self,m,lda,seed=None,lower = 0,upper = float('inf')):
         """Returns m values drawn from a Poisson distribution on lambda for
             which all values are in [lower, upper] through repeated sampling.
             Not guaranteed to terminate.
@@ -136,7 +136,7 @@ class MallowsSamplePoisson(MallowsSample):
             upper: float
                 Upperbound of the sampled values.
         """
-        rng = np.random.default_rng()
+        rng = np.random.default_rng(seed)
         # Samples are drawn repeatedly until enough values
         # reside in [lower,upper]
         sampleSize = m
@@ -177,10 +177,10 @@ class MallowsSamplePoisson(MallowsSample):
         s0: ndarray
             The consensus ranking. The identity ranking by default.
     """
-    def __init__(self,m,n,lda,theta=None,phi=None,s0=None):
+    def __init__(self,m,n,lda,seed=None,theta=None,phi=None,s0=None):
         self.m = m
         self.lda = lda
-        k_distribution = Counter(self.poissonSample(m,lda,1,n))
+        k_distribution = Counter(self.poissonSample(m,lda,seed,1,n))
         super().__init__(n,k_distribution,theta,phi,s0)
 
     def label(self):
@@ -206,4 +206,4 @@ if __name__ == '__main__':
         print(MallowsSampleTopK(m,n,k,theta))
 
         # Samples of top-lists with lengths sampled from Poisson distribution
-        print(MallowsSamplePoisson(m,n,lda,theta))
+        print(MallowsSamplePoisson(m,n,lda,theta=theta,seed=0))
