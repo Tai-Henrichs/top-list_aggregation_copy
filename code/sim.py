@@ -42,15 +42,15 @@ The different choices that we provide are:
 
     -------------------------------
 
-    Usage: python3  sim.py  <s [OR] r>  <[if s] n,N,theta,k>  <[if s] s0=None>
-           <if r: path/to/file.CSV>  <algo1, algo2=None, ...>
+Usage: python3  sim.py  <s [OR] r>  <[if s] n,N,theta,k>  <[if s] s0=None>
+       <if r: path/to/file.CSV>  <algo1, algo2=None, ...>
 
-    Examples:
-        python3 sim.py s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] [Score-Then-Borda]
+Examples:
+    python3 sim.py s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] [Score-Then-Borda]
 
-        python3 sim.py s [10,100,2,4] [RandomSort, Borda+, FootRule+]
+    python3 sim.py s [10,100,2,4] [RandomSort, Borda+, FootRule+]
 
-        python3 sim.py r data/soi/ED-00001-00000001.CSV [Score-Then-Adjust]
+    python3 sim.py r data/soi/ED-00001-00000001.CSV [Score-Then-Adjust]
 
 """
 
@@ -81,6 +81,8 @@ class Simulaton:
         """
         return MallowsSamplePoisson(params).sample
         #return MallowsSampleTopK(params).sample
+
+
 
 
     def parseCSV(self, path):
