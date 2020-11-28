@@ -4,7 +4,7 @@ import pandas as pd
 import mallows_kendall as mk
 import numpy as np
 
-# Sample top-k list from MM
+Sample top-k list from MM
 numRankings = 2
 theta = 0
 k = 1
