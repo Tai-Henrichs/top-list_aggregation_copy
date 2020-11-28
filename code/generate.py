@@ -60,7 +60,9 @@ class MallowsSample:
         self.n = n
         self.theta, self.phi = mk.check_theta_phi(theta, phi)
         self.s0 = np.array(range(n)) if s0 is None else s0
-        self.sample = Counter(self.topListSample(n,k_distribution,theta,phi,s0))
+        self.sample = self.topListSample(n,k_distribution,theta,phi,s0)
+        self.m = len(self.sample)
+        self.sample = Counter(self.sample)
 
     sampleType = "Mallows"
 
@@ -68,6 +70,7 @@ class MallowsSample:
         precision = 2
         return (f"{self.sampleType}_"
                 f"candidates-{self.n}_"
+                f"voters-{self.m}_"
                 f"theta-{self.theta:.{precision}f}_"
                 f"phi-{self.phi:.{precision}f}"
                 )
