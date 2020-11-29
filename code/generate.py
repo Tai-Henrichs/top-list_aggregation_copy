@@ -30,8 +30,8 @@ class MallowsSample:
             list
                 The top-lists generated
         """
-        return [tuple(ranking[~np.isnan(ranking)]) for 
-                k, freq in k_distribution.items() for 
+        return [tuple(ranking[~np.isnan(ranking)]) for
+                k, freq in k_distribution.items() for
                     ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0)]
 
     """This class represents a single sample generated from a
@@ -177,7 +177,7 @@ class MallowsSamplePoisson(MallowsSample):
         s0: ndarray
             The consensus ranking. The identity ranking by default.
     """
-    def __init__(self,m,n,lda,seed=None,theta=None,phi=None,s0=None):
+    def __init__(self,m,n,lda,theta=None,phi=None,s0=None,seed=None,):
         self.m = m
         self.lda = lda
         k_distribution = Counter(self.poissonSample(m,lda,seed,1,n))

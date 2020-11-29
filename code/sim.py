@@ -22,7 +22,7 @@ The different choices that we provide are:
             Model that dictates the probability distribution (consensus)
             iv. 'k' (int) [optional]- the distribution median (i.e. average candidates ranked)
             across all voters)
-            v. 's0' [optional] (int[])- which is the ground lists
+            v. 's0' [optional] (int[])- which is the ground list
 
         b. 'r' (real), only requires a well formatted /path/to/file.CSV. By well
         formatted, we require that:
@@ -43,7 +43,7 @@ The different choices that we provide are:
     -------------------------------
 
 Usage: python3  sim.py  <s [OR] r>  <[if s] n,N,theta,k>  <[if s] s0=None>
-       <if r: path/to/file.CSV>  <algo1, algo2=None, ...>
+       <[if r]: path/to/file.CSV>  <algo1, algo2=None, ...>
 
 Examples:
     python3 sim.py s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] [Score-Then-Borda]
@@ -76,8 +76,9 @@ class Simulaton:
 
     def genMallows(self, params):
         """
-        This method returns a single sample dataset (numpy array) of dimensions
-        (N x n)
+        This method returns a object of type Counter in which input lists are stored
+        with their repective frequencies. Each list (tuple) is the key and the frequency
+        of such list is the value (int)
         """
         return MallowsSamplePoisson(params).sample
         #return MallowsSampleTopK(params).sample
@@ -131,7 +132,7 @@ class Simulaton:
         Params:
         --------------
         args: a lit of args as defined by <s [OR] r>  <[if s] n,N,theta,k>
-              <[if s] s0=None>  <if r: path/to/file.CSV>  <algo1, algo2=None, ...>
+              <[if s] s0=None>  <[if r]: path/to/file.CSV>  <algo1, algo2=None, ...>
 
         """
         arglen = len(args)
@@ -176,7 +177,9 @@ class Simulaton:
 
 
         self.handleFunc()   #runs all algorithms
-        self.writeToFile()  #writes results to file
+        self.writeToFile()  #writes results to file'
+
+        ## TODO: Method is broken! Fix!!!
 
 
 
@@ -184,7 +187,7 @@ class Simulaton:
 if __name__ == '__main__':
     if len(sys.argv) < 3:
         print("wrong usage. Please do: python3  sim.py  <s [OR] r>  <[if s] n,N,\
-        theta,k>  <[if s] s0=None>  <if r: path/to/file.CSV>  <algo1,algo2=None\
+        theta,k>  <[if s] s0=None>  <[if r]: path/to/file.CSV>  <algo1,algo2=None\
         , ...>")
     else:
         sim = Simulation()
