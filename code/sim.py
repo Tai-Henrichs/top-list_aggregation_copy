@@ -1,6 +1,5 @@
 import sys
-import counter
-import footule, randomsort, borda, scorethenborda, scorethenptas, scorethenadjust
+#import footule, randomsort, borda, scorethenborda, scorethenptas, scorethenadjust
 
 from collections import Counter
 from generate import MallowsSamplePoisson
@@ -69,7 +68,7 @@ Examples:
 # documentation for the follwing code is a little informal at the moment but will iteratively be
 # improved as the program develops
 
-class Simulaton:
+class Simulation:
 
     def __init__(self):
         """
@@ -216,7 +215,7 @@ class Simulaton:
 
 
 
-    def __parseListArg__(self, s):
+    def parseListArg(self, s):
         """
         This is a helper for main that serves to process list-like command line args
         Takes string and appropriately transforms into list of strings or ints.
@@ -289,11 +288,10 @@ class Simulaton:
 
 if __name__ == '__main__':
     if not (3 <= len(sys.argv) <=  5):
-        print("wrong usage. Please do: python3 sim.py <s [OR] r>  <algo1,algo2=None, ...>\
-            <[if s] n,N,theta,k>  <[if s] s0=None>  <[if r]: path/to/file.CSV>")
+        print("wrong usage. Please do: python3 sim.py <s [OR] r>  <algo1,algo2=None, ...>  <[if s] n,N,theta,k>  <[if s] s0=None>  <[if r]: path/to/file.CSV>")
     else:
         sim = Simulation()
         sim.main(sys.argv[1:])
         print(sim)
 
-    print("\n Done!")
+    print("\nDone!")
