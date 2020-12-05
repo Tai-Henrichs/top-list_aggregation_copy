@@ -1,5 +1,6 @@
 import sys
-#import footule, randomsort, borda, scorethenborda, scorethenptas, scorethenadjust
+import footule
+# import randomsort, borda, scorethenborda, scorethenptas, scorethenadjust
 
 from collections import Counter
 from generate import MallowsSamplePoisson
