@@ -121,3 +121,13 @@ def alternativeRankFrequency(data, n, N):
     # remark: p is zero indexed for rankings and alternatives. The necessary change of
     # decrementing all alternative IDs by one was made.
     return p / N
+
+
+def unrankedAlternatives(rankfreq):
+    """
+    Given a rank frequency matrix, returns a tuple of the candidates that were
+    not ranked by any top-list in the input
+    """
+    off_by_one =  np.where(np.all(np.isclose(rankfreq, 0), axis=1))[0].tolist()
+    return tuple(i+1 for i in off_by_one)
+

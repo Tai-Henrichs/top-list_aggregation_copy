@@ -43,7 +43,6 @@ def run(data, params):
                  dataset top-lists and sigma
 
     """
-    # start the timer
     start_time = time.process_time()
 
     # 'n' is the number of candidates, also the number of ranks
@@ -66,11 +65,10 @@ def run(data, params):
     off_by_one = np.ones(np.shape(ranking), dtype=int)
     sigma = tuple(ranking + off_by_one)
 
-    # time separate line because too ambiguous when it stops if put in rtn
-    time_elapsed = time.process_time() - start_time
+    time_elapsed = (time.process_time() - start_time) * 1000
 
     #print("{ALGORITHM_NAME}: {sigma}\n")
-    return ALGORITHM_NAME, time_elapsed, utils.generalizedKendallTauDistance(data, sigma, n, N, s0)
+    return ALGORITHM_NAME, round(utils.generalizedKendallTauDistance(data, sigma, n, N, s0), 2), round(time_elapsed, 2) 
 
 
 
@@ -115,5 +113,16 @@ def createCostMatrix(data, n, N):
                 summ += (j-r) * p[i, r]     # following algorithm formula
             arr[i,j] = summ
 
+    ##alternatives that do not get ranked at all must have infinite cost
+    #infcostalts = utils.unrankedAlternatives(p)
+    #print(infcostalts)
+
+    ##TODO: assigns infinite cost for all candidates that were not ranked by any
+    ## top list in the input
+    #infrow = np.ones((n,)) 
+    #for alt in infcostalts:
+    #    arr[alt-1] = infrow
+
     return arr
+
 

@@ -121,7 +121,7 @@ class Simulation:
 
         out += "\nEXPERIMENTS:\n"
         for alg, acc, time in self.results:
-            out += f'{alg} ran in {time} seconds with a score of {acc}\n'
+            out += f'{alg} ran in {time} cpu milliseconds with a score of {acc}\n'
         
         return out
 
