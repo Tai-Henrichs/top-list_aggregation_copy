@@ -44,7 +44,7 @@ def run(data, params):
 
     """
     # start the timer
-    start_time = time.clock()
+    start_time = time.process_time()
 
     # 'n' is the number of candidates, also the number of ranks
     n = params['n']
@@ -56,18 +56,18 @@ def run(data, params):
 
     # get the n x n np.array cost matrix by calling helper function
     # rows are the candidates and cols are the positions
-    cost = createCostMatrix(data, n, m)
+    cost = createCostMatrix(data, n, N)
 
     # run optimization algorithm from scipy library
     _, ranking = linear_sum_assignment(cost)
     # convert answer from np.array to tuple format
 
     # TODO:correction factor because we use zero-indexing in createCostMatrix
-    off_by_one = np.ones(np.shape(ranking))
+    off_by_one = np.ones(np.shape(ranking), dtype=int)
     sigma = tuple(ranking + off_by_one)
 
     # time separate line because too ambiguous when it stops if put in rtn
-    time_elapsed = time.clock()-start_time
+    time_elapsed = time.process_time() - start_time
 
     #print("{ALGORITHM_NAME}: {sigma}\n")
     return ALGORITHM_NAME, time_elapsed, utils.generalizedKendallTauDistance(data, sigma, n, N, s0)

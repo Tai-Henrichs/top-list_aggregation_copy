@@ -53,26 +53,26 @@ def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
 
     """
     def piToTau(pi):
-        # set of all the candidate IDs
-        complete = {i for i in range(1,n+1)}
+        # set of the current top-list. Makes for fast containment queries
+        pi_set = set(pi)
 
-        # gets the symmetri difference, i.e the candidates in complete (full
-        # rankging that are not in pi (because they were not ranked)
-        ties = complete.symmetric_difference(pi)
         # this list will contain all the tied elements in the order of sigma
         extension = []
         for e in sigma:
-            if e in ties:
+            if e not in pi_set:
                 extension.append(e)
 
         # return the extended list pi + ties ordered based on sigma --> tau
         return tuple(list(pi) + extension)
 
+    
     # sum_{i=1}^N K(sigma, tau_i) / N
     cost = 0
     for x in data:
         tau_x = piToTau(x)
-        cost += kendall_tau(sigma, x) * data[x]
+        #print(f'tau_x: {tau_x}')
+        #print(f'sigma: {sigma}')
+        cost += kendall_tau(np.array(x), np.array(sigma)) * data[x]
 
     return cost / N
 
@@ -111,6 +111,10 @@ def alternativeRankFrequency(data, n, N):
         for i in range(len(x)):
             # get alternative ID (and decrement for zero-index matrix)
             alternative = x[i] - 1
+            #TODO: make all synthetic and real datasets type consists instead 
+            # of doing this
+            if type(alternative) != int:
+                alternative = int(alternative)
             # make sure to increment by number of multiplicities of current top-list
             p[alternative, i] += data[x]
 

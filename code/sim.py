@@ -1,5 +1,5 @@
 import sys
-import footule
+import footrule
 # import randomsort, borda, scorethenborda, scorethenptas, scorethenadjust
 
 from collections import Counter
@@ -62,8 +62,7 @@ Examples:
 
     python3 sim.py [RandomSort,Borda+,FootRule+] s [10,100,2,4] 
 
-    python3 sim.py [Score-Then-Adjust] r data/soi/ED-00001-00000001.CSV 
-
+    python3 sim.py [FootRule+] r ../data/soi/ED-00001-00000001.csv
 """
 
 # documentation for the follwing code is a little informal at the moment but will iteratively be
@@ -92,11 +91,11 @@ class Simulation:
 
         self.funcDict = {
                 "FootRule+": footrule.run, 
-                "RandomSort": randomsort.run,
-                "Borda+": borda.run, 
-                "Score-Then-Borda+": scorethenborda.run, 
-                "Score-Then-PTAS": scorethenptas.run, 
-                "Score-Then-Adjust": scorethenadjust.run
+                #"RandomSort": randomsort.run,
+                #"Borda+": borda.run, 
+                #"Score-Then-Borda+": scorethenborda.run, 
+                #"Score-Then-PTAS": scorethenptas.run, 
+                #"Score-Then-Adjust": scorethenadjust.run
                 }
 
         self.data = None
@@ -155,7 +154,7 @@ class Simulation:
               in the future
         """
 
-        return MallowsSamplePoisson(params).sample
+        return MallowsSamplePoisson(params['N'], params['n'], params['k'], theta=params['theta'], s0=params['s0']).sample
 
 
 
@@ -181,11 +180,11 @@ class Simulation:
                 next(f)
             
             #save N
-            self.params['N'] = next(f).split(",")[0]
+            self.params['N'] = int(next(f).split(",")[0])
 
             for line in f:
                 #convert line to list of ints and ignore newline character
-                toplist = [int(i) for i in line.split(',')[:-1]]
+                toplist = [int(i) for i in line.split(',')]
                 #preferences ordering does not include its count
                 toptuple = tuple(toplist[1:])
 
@@ -258,6 +257,8 @@ class Simulation:
             if len(params) == 3:
                 # default k is n/2 if user doesn't specify
                 self.params['k'] = params[1] // 2
+            else:
+                self.params['k'] = params[3]
 
             # update params dict from parsed list
             self.params['n'] = params[0]
@@ -272,12 +273,11 @@ class Simulation:
             self.data = self.genMallows(self.params)
 
             # setting label according to Mallows distribution, n, N, and theta
-            self.params['label'] += f'poisson_n={self.params["n"]}_N={self.params["N"]}_th={self.params["theta"]}'
+            self.params['label'] += f'poisson_n{self.params["n"]}_N{self.params["N"]}_th{self.params["theta"]}'
 
         else:
             print("wrong usage! second argument should be 'r' or 's'")
             return
-
 
         #run all algorithms
         self.handleFunc(self.parseListArg(args[0])) 
@@ -295,4 +295,4 @@ if __name__ == '__main__':
         sim.main(sys.argv[1:])
         print(sim)
 
-    print("\nDone!")
+    print("Done!")
