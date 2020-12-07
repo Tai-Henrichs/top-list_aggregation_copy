@@ -30,7 +30,7 @@ class MallowsSample:
             list
                 The top-lists generated
         """
-        return [tuple(ranking[~np.isnan(ranking)]) for 
+        return [tuple(ranking[~np.isnan(ranking)].astype(int)) for 
                 k, freq in k_distribution.items() for 
                     ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0)]
 
@@ -187,7 +187,7 @@ class MallowsSamplePoisson(MallowsSample):
         return super().label() + f"_lambda-{self.lda}"
 
 # Main function generates synthetic data-sets using the Mallows-Model
-# and saves the output in CSV format. The data-sets are made for the
+# and prints them. The data-sets are made for the
 # the following dispersion parameters: theta = .01, theta = .1
 # For each value of theta, two samples are generated, one where all
 # lists rank the top 5 of 10 candidates, and another where top-lists have
