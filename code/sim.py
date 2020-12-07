@@ -135,9 +135,9 @@ class Simulation:
 
         """
         for c in self.results:
-            fname = f'{self.params["label"]}_{c[0]}.txt'
+            fname = f'{self.params["label"]}'
             f = open(fname, "a") 
-            f.write(f'{c[1]}, {c[2]}\n') 
+            f.write(f'{c[0]}, {c[1]}, {c[2]}\n') 
             f.close()
 
         # TODO: might wanna modify this at some point for different datasets with different
@@ -273,7 +273,7 @@ class Simulation:
             self.data = self.genMallows(self.params)
 
             # setting label according to Mallows distribution, n, N, and theta
-            self.params['label'] += f'poisson_n{self.params["n"]}_N{self.params["N"]}_th{self.params["theta"]}'
+            self.params['label'] += f'mallows_n{self.params["n"]}_N{self.params["N"]}_th{self.params["theta"]}.csv'
 
         else:
             print("wrong usage! second argument should be 'r' or 's'")
