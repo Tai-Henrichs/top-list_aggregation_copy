@@ -1,6 +1,6 @@
 import numpy as np
 from mallows_kendall import kendall_tau
-import heapq
+import heapq 
 import itertools
 
 def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
@@ -238,9 +238,9 @@ def permute(l, permBound, measure=None, top=None):
         perm = perm.append(fixedElements)
         perm = (measure(perm), perm)
         if not bestPerms or len(bestPerms) < top:
-            bestPerms.append(perm)
+            heapq.heappush(bestPerms, perm)
         else:
-            heapq.heappushpop(perm)
+            heapq.heappushpop(bestPerms,perm)
     bestPerms.sort(key=measure)
     return bestPerms
 

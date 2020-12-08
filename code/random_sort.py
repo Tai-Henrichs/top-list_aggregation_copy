@@ -101,8 +101,6 @@ def orderToplists(data, numVoters, seed=None):
     # exponential distribution
     topLists.sort(key=exponentialVarFromList)
     return topLists
-     
-
 
     
 
