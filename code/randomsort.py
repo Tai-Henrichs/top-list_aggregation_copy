@@ -59,7 +59,7 @@ def run(data, params):
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
-    return ALGORITHM_NAME, round(utils.generalizedKendallTauDistance(data, sigma, n, N, s0), 2), round(time_elapsed, 2) 
+    return ALGORITHM_NAME, round(utils.generalizedKendallTauDistance(data, sigma, n, N, s0), 10), round(time_elapsed, 10) 
 
 def orderToplists(data, numVoters, seed=None):
     # Let l be a top-list key in data, and 

@@ -1,6 +1,6 @@
 import sys
-import footrule, borda, scoreborda
-# import randomsort, scorethenadjust
+import footrule, borda, scoreborda, randomsort
+# import , scorethenadjust
 
 from collections import Counter
 from generate import MallowsSamplePoisson
@@ -49,8 +49,7 @@ The different choices that we provide are:
         b. 'RandomSort'
         c. 'Borda+'
         d. 'Score-Then-Borda+'
-        e. 'Score-Then-PTAS' (might not implement)
-        f. 'Score-Then-Adjust'
+        e. 'Score-Then-Adjust'
 
     -------------------------------
 
@@ -91,7 +90,7 @@ class Simulation:
 
         self.funcDict = {
                 "FootRule+": footrule.run, 
-                #"RandomSort": randomsort.run,
+                "RandomSort": randomsort.run,
                 "Borda+": borda.run, 
                 "Score-Then-Borda+": scoreborda.run, 
                 #"Score-Then-Adjust": scorethenadjust.run
@@ -114,13 +113,14 @@ class Simulation:
         """
         Formats dataset statistics and output of simulation for each algorithm
         """
+        precision = 3
         out = "DATASET INFO:\n"
         for key, val in self.params.items():
             out += f'{key}: {val}\n'
 
         out += "\nEXPERIMENTS:\n"
         for alg, acc, time in self.results:
-            out += f'{alg} ran in {time} cpu milliseconds with a score of {acc}\n'
+            out += f'{alg} ran in {time:.{precision}f} cpu milliseconds with a score of {acc:.{precision}f}\n'
         
         return out
 
@@ -225,9 +225,11 @@ class Simulation:
         # split at every comma and save in list
         l = sp.split(",")
 
+        #parse strings to numbers if necessary
+
         #if parsing numerical list, convert to list of (int)
         if l[0].isnumeric():
-            return [int(i) for i in l]
+            return [int(i) if float(i).is_integer() else float(i) for i in l]
 
         #else leave as list of (str) case: parsing algorithms list
         return l

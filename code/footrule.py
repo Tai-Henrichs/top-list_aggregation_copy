@@ -68,7 +68,7 @@ def run(data, params):
     time_elapsed = (time.process_time() - start_time) * 1000
 
     #print("{ALGORITHM_NAME}: {sigma}\n")
-    return ALGORITHM_NAME, round(utils.generalizedKendallTauDistance(data, sigma, n, N, s0), 2), round(time_elapsed, 2) 
+    return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed
 
 
 

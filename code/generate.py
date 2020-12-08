@@ -67,7 +67,7 @@ class MallowsSample:
     sampleType = "Mallows"
 
     def label(self):
-        precision = 2
+        precision = 3
         return (f"{self.sampleType}_"
                 f"candidates-{self.n}_"
                 f"voters-{self.m}_"
