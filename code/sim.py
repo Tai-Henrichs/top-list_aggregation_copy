@@ -1,5 +1,5 @@
 import sys
-import footrule, borda, scoreborda, randomsort
+import footrule, borda, scoreborda, random_sort
 # import , scorethenadjust
 
 from collections import Counter
@@ -90,10 +90,10 @@ class Simulation:
 
         self.funcDict = {
                 "FootRule+": footrule.run, 
-                "RandomSort": randomsort.run,
+                "RandomSort": random_sort.run,
                 "Borda+": borda.run, 
                 "Score-Then-Borda+": scoreborda.run, 
-                #"Score-Then-Adjust": scorethenadjust.run
+                #"Score-Then-Adjust": score_then_adjust.run
                 }
 
         self.data = None

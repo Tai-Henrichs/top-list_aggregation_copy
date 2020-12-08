@@ -3,9 +3,6 @@ import time
 import numpy as np
 import operator
 
-from scipy.optimize import linear_sum_assignment
-
-
 ALGORITHM_NAME = "RandomSort"
 
 def run(data, params):
@@ -51,6 +48,9 @@ def run(data, params):
     # (distribution is drawn off this full ranking)
     s0 = params['s0']
 
+    # Use a dictionary to improve performance 
+    # when checking whether a candidate has 
+    # already been added to the top-list
     sigma = {}
     for l, _ in orderToplists(data, N):
         for candidate in l:
@@ -59,7 +59,7 @@ def run(data, params):
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
-    return ALGORITHM_NAME, round(utils.generalizedKendallTauDistance(data, sigma, n, N, s0), 10), round(time_elapsed, 10) 
+    return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed
 
 def orderToplists(data, numVoters, seed=None):
     # Let l be a top-list key in data, and 
@@ -86,6 +86,7 @@ def orderToplists(data, numVoters, seed=None):
 
     # scale = 1 / (data[l] / numVoters) avoids divide by zero 
     # that numVoters / data[l] enounters when data[l] is zero
+    # Note that numVoters should never be zero
     topLists = [(l,rng.exponential(scale = 1 / (data[l] / numVoters))) for l in data]
     topLists.sort()
     return topLists

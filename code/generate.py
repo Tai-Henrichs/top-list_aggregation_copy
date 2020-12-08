@@ -30,7 +30,12 @@ class MallowsSample:
             list
                 The top-lists generated
         """
-        return [tuple(ranking[~np.isnan(ranking)].astype(int)) for 
+        # One is added to the label of each candidate for consistency with 
+        # datsets from PrefLib, which never have a candidate named zero, 
+        # unlike the data genereted from mallows_kendall.py
+        # Since this relabels the names of candidates without changing their 
+        # relative rankings, this does not affect results
+        return [tuple(ranking[~np.isnan(ranking)].astype(int) + 1) for 
                 k, freq in k_distribution.items() for 
                     ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0)]
 
@@ -59,7 +64,7 @@ class MallowsSample:
     def __init__(self,n,k_distribution,theta=None,phi=None,s0=None):
         self.n = n
         self.theta, self.phi = mk.check_theta_phi(theta, phi)
-        self.s0 = np.array(range(n)) if s0 is None else s0
+        self.s0 = np.array(range(n)) + 1 if s0 is None else s0
         self.sample = self.topListSample(n,k_distribution,theta,phi,s0)
         self.m = len(self.sample)
         self.sample = Counter(self.sample)
