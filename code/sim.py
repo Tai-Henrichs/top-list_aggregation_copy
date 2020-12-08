@@ -1,6 +1,6 @@
 import sys
-import footrule
-# import randomsort, borda, scorethenborda, scorethenptas, scorethenadjust
+import footrule, borda, scoreborda
+# import randomsort, scorethenadjust
 
 from collections import Counter
 from generate import MallowsSamplePoisson
@@ -58,7 +58,7 @@ Usage: python3 sim.py <s [OR] r>  <algo1,algo2=None, ...>  <[if s] n,N,theta,k> 
 
 Examples:
 
-    python3 sim.py [Score-Then-Borda] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] 
+    python3 sim.py [Score-Then-Borda+] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] 
 
     python3 sim.py [RandomSort,Borda+,FootRule+] s [10,100,2,4] 
 
@@ -92,9 +92,8 @@ class Simulation:
         self.funcDict = {
                 "FootRule+": footrule.run, 
                 #"RandomSort": randomsort.run,
-                #"Borda+": borda.run, 
-                #"Score-Then-Borda+": scorethenborda.run, 
-                #"Score-Then-PTAS": scorethenptas.run, 
+                "Borda+": borda.run, 
+                "Score-Then-Borda+": scoreborda.run, 
                 #"Score-Then-Adjust": scorethenadjust.run
                 }
 
