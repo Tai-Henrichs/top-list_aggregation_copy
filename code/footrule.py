@@ -99,7 +99,7 @@ def createCostMatrix(data, n, N):
         
     """
     # gets n by n matrix of occurances for each alternative for each rank
-    p = utils.alternativeRankFrequency(data,n,N)
+    p = utils.alternativeRankFrequency(data,n) / N
     
     # creates empty n by n cost matrix
     # should not be any empty entries by end of function

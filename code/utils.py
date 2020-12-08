@@ -70,13 +70,11 @@ def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
     cost = 0
     for x in data:
         tau_x = piToTau(x)
-        #print(f'tau_x: {tau_x}')
-        #print(f'sigma: {sigma}')
         cost += kendall_tau(np.array(x), np.array(sigma)) * data[x]
 
     return cost / N
 
-def alternativeRankFrequency(data, n, N):
+def alternativeRankFrequency(data, n):
     """
     This functions computes an n by n matrix 'p' where p[i,j] is the number of
     voters that placed candidate i in rank k.
@@ -120,14 +118,77 @@ def alternativeRankFrequency(data, n, N):
 
     # remark: p is zero indexed for rankings and alternatives. The necessary change of
     # decrementing all alternative IDs by one was made.
-    return p / N
+    return p 
 
 
-def unrankedAlternatives(rankfreq):
+
+def scores(data, n, N):
+    """
+    Computes the probability that a candidate is ranked
+    ----------------------------
+
+    Params
+        Same as above
+    ----------------------------
+
+    Returns
+        A (n,) numpy array corresponding to the score of each candidate
+    """
+    return np.sum(alternativeRankFrequency(data,n), axis=1) / N
+
+
+
+def unrankedAlternatives(data, n, N):
     """
     Given a rank frequency matrix, returns a tuple of the candidates that were
     not ranked by any top-list in the input
+    --------------------------
+
+    Params
+    'rankfreq': (n,n) np.array
+                Matrix desribing the frequency of eacch alternative appearing in
+                a given rank position
+    --------------------------
+
+    Returns
+        A tuple of the alternatives that never appear in any top-list
     """
-    off_by_one =  np.where(np.all(np.isclose(rankfreq, 0), axis=1))[0].tolist()
+    off_by_one =  np.where(np.isclose(scores(data,n,N), 0))[0].tolist()
     return tuple(i+1 for i in off_by_one)
 
+
+
+def avgRanks(data, n, N):
+    """
+    Computes the average rank for each candidate conditioned on them appearing
+    at least in one input list. Rank for candidate i is defined as
+        Rank_i := sum_{r=1}^n p(pi_i=r) / Score_i · r 
+    ----------------------------
+
+    Params
+        Same as above
+    ----------------------------
+
+    Returns
+        A (n,) np.array of each candidate's average rank. A float('inf') is for
+        candidates that never appear in the input list
+    """
+    # get scores of all candidates
+    sc = scores(data, n, N)
+    # get rank frequency for all candidates (and convert to prob by / N)
+    freqs = alternativeRankFrequency(data,n) / N
+    # [1, 2, 3, ..., n] used to multiply sum element
+    r = np.arange(1, n+1)
+
+    #initialize empty 1D (n,) np.array
+    ranks = np.empty((n,))
+
+    for i in range(n):
+        # if candidate doesn't even appear once, rank is infinity
+        if sc[i] == 0:
+            ranks[i] = float('inf')
+        # formula above
+        else:
+            ranks[i] = np.sum((freqs[i] / sc[i]) * r)
+        
+    return ranks
