@@ -197,49 +197,52 @@ def avgRanks(data, n, N):
     return ranks
 
 def permute(l, permBound, measure=None, top=None):
-"""
-   Considers all possible permutations of the items in l 
-   which can be made by permuting the first permBound elements 
-   of l. Returns a list of the permutations that maximize 
-   measure, where the number of permutations 
-   returned is specified by top. The returned permutations 
-   are ordered from most to least satisfaction of measure. 
-    ----------------------------
-    Params
-        
-    ----------------------------
+    """
+    Considers all possible permutations of the items in l 
+    which can be made by permuting the first permBound elements 
+    of l. Returns a list of the permutations that maximize 
+    measure, where the number of permutations 
+    returned is specified by top. The returned permutations 
+    are ordered from most to least satisfaction of measure. 
+        ----------------------------
+        Params
+            l: list
+            permBound: int
+            measure: function with one parameter that receives a list
+            top: int
+        ----------------------------
 
-    Returns
-"""
-fixedElements = l[- (len(l) - permBound)]
+        Returns a list of permutations, each represented by a list
+    """
+    fixedElements = l[- (len(l) - permBound)]
 
-# Case in which one (or both) of measure and top are None
-perms = []
-if top is None or measure is None:
-    perms = [perm.append(fixedElements) for perm in itertools.permutations(l[:permBound])]
+    # Case in which one (or both) of measure and top are None
+    perms = []
+    if top is None or measure is None:
+        perms = [perm.append(fixedElements) for perm in itertools.permutations(l[:permBound])]
 
-if top is None:
-    if measure is not None:
-        perms.sort(key=measure)
-    return perms
+    if top is None:
+        if measure is not None:
+            perms.sort(key=measure)
+        return perms
 
-if measure is None:
-    return perms[:top]
+    if measure is None:
+        return perms[:top]
 
-# Case in which both top and measure are specified 
+    # Case in which both top and measure are specified 
 
-# bestPerms is a min-heap that stores the top permutations 
-# maximizing measure so far
-bestPerms = []
-for perm in itertools.permutations(l[:permBound]):
-    perm = perm.append(fixedElements)
-    perm = (measure(perm), perm)
-    if not bestPerms or len(bestPerms) < top:
-        bestPerms.append(perm)
-    else:
-        heapq.heappushpop(perm)
-bestPerms.sort(key=measure)
-return bestPerms
+    # bestPerms is a min-heap that stores the top permutations 
+    # maximizing measure so far
+    bestPerms = []
+    for perm in itertools.permutations(l[:permBound]):
+        perm = perm.append(fixedElements)
+        perm = (measure(perm), perm)
+        if not bestPerms or len(bestPerms) < top:
+            bestPerms.append(perm)
+        else:
+            heapq.heappushpop(perm)
+    bestPerms.sort(key=measure)
+    return bestPerms
 
 
 
