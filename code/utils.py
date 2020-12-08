@@ -1,5 +1,8 @@
 import numpy as np
 from mallows_kendall import kendall_tau
+import heapq
+import itertools
+
 def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
     """
     This method computes the average Kendall Tau Distance by computing
@@ -192,3 +195,56 @@ def avgRanks(data, n, N):
             ranks[i] = np.sum((freqs[i] / sc[i]) * r)
         
     return ranks
+
+def permute(l, permBound, measure=None, top=None):
+"""
+   Considers all possible permutations of the items in l 
+   which can be made by permuting the first permBound elements 
+   of l. Returns a list of the permutations that maximize 
+   measure, where the number of permutations 
+   returned is specified by top. The returned permutations 
+   are ordered from most to least satisfaction of measure. 
+    ----------------------------
+    Params
+        
+    ----------------------------
+
+    Returns
+"""
+fixedElements = l[- (len(l) - permBound)]
+
+# Case in which one (or both) of measure and top are None
+perms = []
+if top is None or measure is None:
+    perms = [perm.append(fixedElements) for perm in itertools.permutations(l[:permBound])]
+
+if top is None:
+    if measure is not None:
+        perms.sort(key=measure)
+    return perms
+
+if measure is None:
+    return perms[:top]
+
+# Case in which both top and measure are specified 
+
+# bestPerms is a min-heap that stores the top permutations 
+# maximizing measure so far
+bestPerms = []
+for perm in itertools.permutations(l[:permBound]):
+    perm = perm.append(fixedElements)
+    perm = (measure(perm), perm)
+    if not bestPerms or len(bestPerms) < top:
+        bestPerms.append(perm)
+    else:
+        heapq.heappushpop(perm)
+bestPerms.sort(key=measure)
+return bestPerms
+
+
+
+
+
+
+
+

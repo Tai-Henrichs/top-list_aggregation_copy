@@ -28,7 +28,7 @@ The different choices that we provide are:
                     the distribution median (i.e. average candidates ranked)
                     across all voters)
                 's0' [optional] : int[]
-                    the ground list
+                    the ground list, which should order the n candidates 1,2,...,n
 
         b. 'r' (real), only requires a well formatted /path/to/file.CSV. By well
         formatted, we require that:

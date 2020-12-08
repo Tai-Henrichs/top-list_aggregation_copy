@@ -51,6 +51,8 @@ def run(data, params):
     # Use a dictionary to improve performance 
     # when checking whether a candidate has 
     # already been added to the top-list
+    # Relies on dictionaries being ordered 
+    # as of Python 3.7
     sigma = {}
     for l, _ in orderToplists(data, N):
         for candidate in l:
@@ -82,13 +84,22 @@ def orderToplists(data, numVoters, seed=None):
     #        The total number of voters
     # seed: int
     #        Seed used for random number generation
-    rng = np.random.default_rng(seed)
 
-    # scale = 1 / (data[l] / numVoters) avoids divide by zero 
-    # that numVoters / data[l] enounters when data[l] is zero
-    # Note that numVoters should never be zero
-    topLists = [(l,rng.exponential(scale = 1 / (data[l] / numVoters))) for l in data]
-    topLists.sort()
+    # Get all top-lists from data
+    topLists = [data]
+
+    def exponentialVarFromList(l):
+        # scale = 1 / (data[l] / numVoters) avoids divide by zero 
+        # that numVoters / data[l] enounters when data[l] is zero
+        # Note that numVoters should never be zero since that implies 
+        # an empty data-set
+        rng = np.random.default_rng(seed)
+        scale = 1 / (data[l] / numVoters)
+        return rng.exponential(scale) 
+
+    # key set to sort by the random variable sampled for each list from the 
+    # exponential distribution
+    topLists.sort(key=exponentialVarFromList)
     return topLists
      
 
