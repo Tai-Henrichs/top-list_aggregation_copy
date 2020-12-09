@@ -1,9 +1,8 @@
 import numpy as np
 import time
 
-from mallows_kendall import kendall_tau
 from itertools import permutations
-from utils import piToTau
+from utils import piToTau, kendall_tau
 
 ALGORITHM_NAME = "OPTIMAL_SOLUTION"
 

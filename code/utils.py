@@ -1,5 +1,4 @@
 import numpy as np
-from mallows_kendall import kendall_tau
 import heapq 
 import itertools
 
@@ -58,12 +57,25 @@ def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
     # sum_{i=1}^N K(sigma, tau_i) / N
     cost = 0
     for x in data:
-        tau_x = piToTau(x, sigma)
-        cost += kendall_tau(tau_x, np.array(sigma)) * data[x]
-
+        cost += kendall_tau(np.array(sigma), piToTau(x, sigma)) * data[x]
     return cost / N
 
 
+def kendall_tau(rank_a,rank_b):
+
+    """Calculates the Kendall Tau distance.
+    Keyword arguments:
+        rank_a -- a ballot
+        rank_b -- a ballot
+    """
+    tau = 0
+    n_candidates = len(rank_a)
+
+    for i, j in itertools.combinations(range(n_candidates), 2):
+        tau += (np.sign(rank_a[i] - rank_a[j]) ==
+                -np.sign(rank_b[i] - rank_b[j]))
+
+    return tau
 
 def piToTau(pi, sigma):
     """
@@ -99,7 +111,7 @@ def piToTau(pi, sigma):
 def alternativeRankFrequency(data, n):
     """
     This functions computes an n by n matrix 'p' where p[i,j] is the number of
-    voters that placed candidate i in rank k.
+    voters that placed candidate i in rank j.
     --------------------------------------
 
     Params
