@@ -55,27 +55,46 @@ def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
                        has many application beyond voting theory
 
     """
-    def piToTau(pi):
-        # set of the current top-list. Makes for fast containment queries
-        pi_set = set(pi)
-
-        # this list will contain all the tied elements in the order of sigma
-        extension = []
-        for e in sigma:
-            if e not in pi_set:
-                extension.append(e)
-
-        # return the extended list pi + ties ordered based on sigma --> tau
-        return tuple(list(pi) + extension)
-
-    
     # sum_{i=1}^N K(sigma, tau_i) / N
     cost = 0
     for x in data:
-        tau_x = piToTau(x)
-        cost += kendall_tau(np.array(x), np.array(sigma)) * data[x]
+        tau_x = piToTau(x, sigma)
+        cost += kendall_tau(tau_x, np.array(sigma)) * data[x]
 
     return cost / N
+
+
+
+def piToTau(pi, sigma):
+    """
+    Helper function that converts top-lists pi_i to tau_i full lists
+    given some full list sigma that breaks ties for nonranked candidates
+    in pi_i
+
+    Params
+        pi : tuple
+             a top list
+        sigma: tuple
+               a full list
+
+    Returns
+        a (n,) np array, tau.
+    """
+
+    # set of the current top-list. Makes for fast containment queries
+    pi_set = set(pi)
+
+    # this list will contain all the tied elements in the order of sigma
+    extension = []
+    for e in sigma:
+        if e not in pi_set:
+            extension.append(e)
+
+    # return the extended list pi + ties ordered based on sigma --> tau
+    return np.array(list(pi) + extension)
+
+
+
 
 def alternativeRankFrequency(data, n):
     """
@@ -243,11 +262,4 @@ def permute(l, permBound, measure=None, top=None):
             heapq.heappushpop(bestPerms,perm)
     bestPerms.sort(key=measure)
     return bestPerms
-
-
-
-
-
-
-
 
