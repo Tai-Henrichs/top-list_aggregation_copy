@@ -48,11 +48,11 @@ def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
                 Simon and Mathieu paper 'How To Rank Top-Lists'
 
         'ground_dist': float [OPTIONAL]
-                       Another reasonable measure of accuracy: the distance
-                       between the approximate solution sigma and the ground
-                       truth (known optimal ranking s0). This is useful in
-                       cases where common prior are reasonable assumptions and
-                       has many application beyond voting theory
+                Another reasonable measure of accuracy: the distance
+                between the approximate solution sigma and the ground
+                truth (known optimal ranking s0). This is useful in
+                cases where common prior are reasonable assumptions and
+                has many application beyond voting theory
 
     """
     def piToTau(pi):
@@ -80,7 +80,7 @@ def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
 def alternativeRankFrequency(data, n):
     """
     This functions computes an n by n matrix 'p' where p[i,j] is the number of
-    voters that placed candidate i in rank k.
+    voters that placed candidate i in rank j.
     --------------------------------------
 
     Params
@@ -203,23 +203,25 @@ def permute(l, permBound, measure=None, top=None):
     of l. Returns a list of the permutations that maximize 
     measure, where the number of permutations 
     returned is specified by top. The returned permutations 
-    are ordered from most to least satisfaction of measure. 
+    are ordered from most to least satisfaction of measure and 
+    are accompanied by their measures. 
         ----------------------------
         Params
             l: list
             permBound: int
-            measure: function with one parameter that receives a list
+            measure: function with one parameter that receives a list and outputs a float
             top: int
         ----------------------------
 
-        Returns a list of permutations, each represented by a list
+        Returns a list of tuples, where each tuple has the form:
+            (measure(permutation), permutation as a list)
     """
-    fixedElements = l[- (len(l) - permBound)]
+    fixedElements = l[permBound:None]
 
     # Case in which one (or both) of measure and top are None
     perms = []
     if top is None or measure is None:
-        perms = [perm.append(fixedElements) for perm in itertools.permutations(l[:permBound])]
+        perms = [list(perm).extend(fixedElements) for perm in itertools.permutations(l[:permBound])]
 
     if top is None:
         if measure is not None:
@@ -235,13 +237,16 @@ def permute(l, permBound, measure=None, top=None):
     # maximizing measure so far
     bestPerms = []
     for perm in itertools.permutations(l[:permBound]):
-        perm = perm.append(fixedElements)
+        perm = list(perm)
+        perm.extend(fixedElements)
         perm = (measure(perm), perm)
+
         if not bestPerms or len(bestPerms) < top:
             heapq.heappush(bestPerms, perm)
         else:
-            heapq.heappushpop(bestPerms,perm)
-    bestPerms.sort(key=measure)
+            heapq.heappushpop(bestPerms, perm)
+        
+    bestPerms.sort()
     return bestPerms
 
 

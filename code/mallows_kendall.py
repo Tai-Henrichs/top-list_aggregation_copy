@@ -612,7 +612,7 @@ def sampling_gmm(m,theta,s0=None):
         sample.append(ranking)
     return np.array([s[s0] for s in sample])
 
-def sampling_top_k_rankings(m,n,k,theta=None, phi=None, s0=None):
+def sampling_top_k_rankings(m,n,k,theta=None, phi=None, s0=None, seed=None):
     """This function generates m top-k rankings according according
     to Mallows Models adapted to top-k rankings given a parameter of dispersion
     (theta or phi).
@@ -633,6 +633,7 @@ def sampling_top_k_rankings(m,n,k,theta=None, phi=None, s0=None):
         list
             The top-k rankings generated
     """
+    np.random.seed(seed)
     sample_orderings = sampling_mm(m,n,theta=theta, phi=phi, s0=s0)
     if s0 is None:
         s0 = np.array(range(n))

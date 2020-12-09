@@ -1,6 +1,5 @@
 import sys
-import footrule, borda, scoreborda, random_sort
-# import , scorethenadjust
+import footrule, borda, scoreborda, random_sort, score_then_adjust, ast
 
 from collections import Counter
 from generate import MallowsSamplePoisson
@@ -51,13 +50,16 @@ The different choices that we provide are:
         d. 'Score-Then-Borda+'
         e. 'Score-Then-Adjust'
 
+    3. An optinal seed argument. If provided, all random number generation will utilize the given seed. By default, 
+        random number generation will utilize the system's internal clock. 
+
     -------------------------------
 
-Usage: python3 sim.py <s [OR] r>  <algo1,algo2=None, ...>  <[if s] n,N,theta,k>  <[if s] s0>  <[if r]: path/to/file.CSV>
+Usage: python3 sim.py [algo1,algo2,...] [s <OR> r]  [<if s> n,N,theta,k]  [<if s> s0]  [<if r>: path/to/file.CSV] seed
 
 Examples:
 
-    python3 sim.py [Score-Then-Borda+] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] 
+    python3 sim.py [Score-Then-Borda+] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] 0
 
     python3 sim.py [RandomSort,Borda+,FootRule+] s [10,100,2,4] 
 
@@ -83,7 +85,7 @@ class Simulation:
                         with their repective frequencies. Each top-list (tuple) is the key and 
                         the frequency of such list is the value (int) 
 
-            'params' : dataset information to keep track of like n, N, k, and s0
+            'params' : testing information to keep track of like n, N, k, s0, and seed
 
         """
         self.results = []
@@ -93,7 +95,7 @@ class Simulation:
                 "RandomSort": random_sort.run,
                 "Borda+": borda.run, 
                 "Score-Then-Borda+": scoreborda.run, 
-                #"Score-Then-Adjust": score_then_adjust.run
+                "Score-Then-Adjust": score_then_adjust.run
                 }
 
         self.data = None
@@ -104,7 +106,8 @@ class Simulation:
                 'N': None,
                 'k': None,
                 'theta': None,
-                's0': None
+                's0': None,
+                'seed' : None
                 }
 
 
@@ -153,7 +156,7 @@ class Simulation:
               in the future
         """
 
-        return MallowsSamplePoisson(params['N'], params['n'], params['k'], theta=params['theta'], s0=params['s0']).sample
+        return MallowsSamplePoisson(params['N'], params['n'], params['k'], theta=params['theta'], s0=params['s0'], seed=params['seed']).sample
 
 
 
@@ -226,8 +229,6 @@ class Simulation:
         l = sp.split(",")
 
         #parse strings to numbers if necessary
-
-        #if parsing numerical list, convert to list of (int)
         if l[0].isnumeric():
             return [int(i) if float(i).is_integer() else float(i) for i in l]
 
@@ -251,6 +252,11 @@ class Simulation:
             self.params['label'] +=  args[2].split("/")[-1]
             self.data = self.parseCSV(args[2])
 
+            # Set seed if provided
+            if arglen == 3:
+                self.params['seed'] = int(args[2])
+
+
         elif args[1] == "s":
             params = self.parseListArg(args[2])
 
@@ -266,9 +272,23 @@ class Simulation:
             self.params['N'] = params[1]
             self.params['theta'] = params[2]
 
-            # extract user specified ground ranking if exists
+            # Handle optional arguments
+
+            # One optional argument
+            optionalArgErrMsg = "Optional arguments for simulated data must be either a seed (int) or ground list (s0)"
             if arglen == 4:
+                # The one optional argument is a seed
+                if args[3].isdigit():
+                    self.params['seed'] = int(args[3])
+                # The one optional argument is a ground list
+                elif type(ast.literal_eval(args[3])) is list:
+                    self.params['s0'] = self.parseListArg(args[3])
+                # Error!
+                else:
+                    print(optionalArgErrMsg)
+            elif arglen == 5:
                 self.params['s0'] = self.parseListArg(args[3])
+                self.params['seed'] = int(args[4])
 
             # generate data
             self.data = self.genMallows(self.params)

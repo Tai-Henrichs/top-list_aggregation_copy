@@ -2,12 +2,14 @@ import utils
 import time
 import numpy as np
 import operator
+import math
 
-ALGORITHM_NAME = "RandomSort"
 
-def run(data, params):
+ALGORITHM_NAME = "Score-Then-Adjust"
+
+def run(data, params, epsilon = 1):
     """
-    This method implements the random sort algorithm.
+    This method implements the Score-Then-Adjust algorithm.
     -------------------------------------
 
     Params
@@ -48,39 +50,39 @@ def run(data, params):
     # (distribution is drawn off this full ranking)
     s0 = params['s0']
 
-    # Get all top-lists from data
-    topLists = [t for t in data.keys()]
+    # Order candidates by non-increasing scores (descending order with lexicographic tie-breaking)
+    candidateScores = utils.scores(data,n,N)
+    candidates = [i for i in range(1,n+1)]
+    candidates.sort(key=lambda i : candidateScores[i-1], reverse=True)
 
-    def exponentialVarFromList(t):
-        # t is a tuple from data representing a top-list
+    permBound = (1 + (1.0 / epsilon)) * (params['k'] - 1)
+    permBound = math.ceil(permBound)
+    # Consider all possible permutations of the sorted list of candidates, 
+    # only allowing the first permBound candidates to be shifted in their locations
+    # Select the permutation that minimizes kendall-tau distance
+    
+    # Multiply by negative one because utils.permute maximizes the objective function
+    # So, to minimize Kendall-Tau, we should maximize the inverse of Kendall-Tau
+    invertedKentallTau = lambda l : -1.0 * utils.generalizedKendallTauDistance(data, l, n, N, s0)
 
-        # scale = 1 / (data[t] / numVoters) avoids divide by zero 
-        # that numVoters / data[t] enounters when data[t] is zero
-        # Note that numVoters should never be zero since that implies 
-        # an empty data-set
-        rng = np.random.default_rng(params['seed'])
-        scale = 1 / (data[t] / N)
-        return rng.exponential(scale) 
-
-    # Sorts lists in ascending order of values sampled 
-    # from the exponential distribution associated with 
-    # each list. The exponential distribution associated 
-    # with a given list has rate equal to 
-    # f / N, where f is the frequency of the list 
-    # in question
-    topLists.sort(key=exponentialVarFromList)
-
-    # Use a dictionary to improve performance 
-    # when checking whether a candidate has 
-    # already been added to the top-list
-    # Relies on dictionaries being ordered 
-    # as of Python 3.7
-    sigma = {}
-    for l in topLists:
-        for candidate in l:
-            sigma.setdefault(candidate)
-    sigma = tuple(sigma)
+    # permute returns a list containing (top = 1) tuple
+    # This assigns the second element of the first tuple to 
+    # sigma because that is the permutation that minimizes kendall-tau
+    sigma = utils.permute(candidates, permBound, measure=invertedKentallTau, top=1)[0][1]
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
     return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed
+
+
+
+
+     
+
+
+    
+
+
+
+
+

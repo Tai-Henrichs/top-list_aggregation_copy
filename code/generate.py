@@ -4,7 +4,7 @@ import collections
 from collections import Counter
 
 class MallowsSample:
-    def topListSample(self,n,k_distribution,theta=None,phi=None,s0=None):
+    def topListSample(self,n,k_distribution,theta=None,phi=None,s0=None,seed=None):
         """This function generates a single sample according
         to Mallows Models adapted to top-k rankings given a parameter of dispersion
         (theta or phi), where the values of k are controlled by k_distribution
@@ -37,7 +37,7 @@ class MallowsSample:
         # relative rankings, this does not affect results
         return [tuple(ranking[~np.isnan(ranking)].astype(int) + 1) for 
                 k, freq in k_distribution.items() for 
-                    ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0)]
+                    ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0, seed)]
 
     """This class represents a single sample generated from a
     Mallows Models adapted to top-k rankings given a parameter of dispersion
@@ -61,11 +61,11 @@ class MallowsSample:
         s0: ndarray
             The consensus ranking. The identity ranking by default.
     """
-    def __init__(self,n,k_distribution,theta=None,phi=None,s0=None):
+    def __init__(self,n,k_distribution,theta=None,phi=None,s0=None,seed=None):
         self.n = n
         self.theta, self.phi = mk.check_theta_phi(theta, phi)
         self.s0 = np.array(range(n)) + 1 if s0 is None else s0
-        self.sample = self.topListSample(n,k_distribution,theta,phi,s0)
+        self.sample = self.topListSample(n,k_distribution,theta,phi,s0,seed)
         self.m = len(self.sample)
         self.sample = Counter(self.sample)
 
@@ -113,11 +113,11 @@ class MallowsSampleTopK(MallowsSample):
     ndarray
     The top-lists generated
     """
-    def __init__(self,m,n,k,theta=None,phi=None,s0=None):
+    def __init__(self,m,n,k,theta=None,phi=None,s0=None,seed=None):
         self.m = m
         self.k = k
         k_distribution = {k : m}
-        super().__init__(n,k_distribution,theta,phi,s0)
+        super().__init__(n,k_distribution,theta,phi,s0,seed)
 
     def label(self):
         return super().label() + f"_k-{self.k}"
@@ -181,12 +181,15 @@ class MallowsSamplePoisson(MallowsSample):
             The dispersion parameter phi
         s0: ndarray
             The consensus ranking. The identity ranking by default.
+        seed: int
+            seed used for random number generation. Defaults to system-time 
+            if none is provided.
     """
-    def __init__(self,m,n,lda,theta=None,phi=None,s0=None,seed=None,):
+    def __init__(self,m,n,lda,theta=None,phi=None,s0=None,seed=None):
         self.m = m
         self.lda = lda
         k_distribution = Counter(self.poissonSample(m,lda,seed,1,n))
-        super().__init__(n,k_distribution,theta,phi,s0)
+        super().__init__(n,k_distribution,theta,phi,s0,seed)
 
     def label(self):
         return super().label() + f"_lambda-{self.lda}"
