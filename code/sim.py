@@ -1,9 +1,9 @@
 import sys
-import footrule, borda, scoreborda, random_sort, score_then_adjust, ast
+import ast
+import footrule, borda, scoreborda, random_sort, score_then_adjust, optimal
 
 from collections import Counter
 from generate import MallowsSamplePoisson
-#from generate import MallowsSampleTopK
 
 
 """
@@ -95,7 +95,8 @@ class Simulation:
                 "RandomSort": random_sort.run,
                 "Borda+": borda.run, 
                 "Score-Then-Borda+": scoreborda.run, 
-                "Score-Then-Adjust": score_then_adjust.run
+                "Score-Then-Adjust": score_then_adjust.run,
+                #"LocalSearch": localsearch.run
                 }
 
         self.data = None
@@ -206,6 +207,8 @@ class Simulation:
         from particular algorithm in 'alg'
 
         """
+        #self.results.append(optimal.run(self.data, self.params))
+
         for func in algorithms:
             if func not in self.funcDict:
                 print(f'incorrect function name! {func} was not found')
@@ -305,7 +308,6 @@ class Simulation:
 
         #write all results to files
         self.writeToFile()
-
 
 
 if __name__ == '__main__':

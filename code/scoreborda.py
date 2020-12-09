@@ -50,7 +50,8 @@ def run(data, params):
 
 
     # random var (float) u [0,1)
-    u = np.random.random_sample()
+    rng = np.random.default_rng(params['seed'])
+    u = rng.uniform(0,1)
     # get scores array
     scores = utils.scores(data, n, N)
     # get avg ranks array

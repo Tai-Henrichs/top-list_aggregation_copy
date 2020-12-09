@@ -1,5 +1,4 @@
 import numpy as np
-from mallows_kendall import kendall_tau
 import heapq 
 import itertools
 
@@ -55,27 +54,59 @@ def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
                 has many application beyond voting theory
 
     """
-    def piToTau(pi):
-        # set of the current top-list. Makes for fast containment queries
-        pi_set = set(pi)
-
-        # this list will contain all the tied elements in the order of sigma
-        extension = []
-        for e in sigma:
-            if e not in pi_set:
-                extension.append(e)
-
-        # return the extended list pi + ties ordered based on sigma --> tau
-        return tuple(list(pi) + extension)
-
-    
     # sum_{i=1}^N K(sigma, tau_i) / N
     cost = 0
     for x in data:
-        tau_x = piToTau(x)
-        cost += kendall_tau(np.array(x), np.array(sigma)) * data[x]
-
+        cost += kendall_tau(np.array(sigma), piToTau(x, sigma)) * data[x]
     return cost / N
+
+
+def kendall_tau(rank_a,rank_b):
+
+    """Calculates the Kendall Tau distance.
+    Keyword arguments:
+        rank_a -- a ballot
+        rank_b -- a ballot
+    """
+    tau = 0
+    n_candidates = len(rank_a)
+
+    for i, j in itertools.combinations(range(n_candidates), 2):
+        tau += (np.sign(rank_a[i] - rank_a[j]) ==
+                -np.sign(rank_b[i] - rank_b[j]))
+
+    return tau
+
+def piToTau(pi, sigma):
+    """
+    Helper function that converts top-lists pi_i to tau_i full lists
+    given some full list sigma that breaks ties for nonranked candidates
+    in pi_i
+
+    Params
+        pi : tuple
+             a top list
+        sigma: tuple
+               a full list
+
+    Returns
+        a (n,) np array, tau.
+    """
+
+    # set of the current top-list. Makes for fast containment queries
+    pi_set = set(pi)
+
+    # this list will contain all the tied elements in the order of sigma
+    extension = []
+    for e in sigma:
+        if e not in pi_set:
+            extension.append(e)
+
+    # return the extended list pi + ties ordered based on sigma --> tau
+    return np.array(list(pi) + extension)
+
+
+
 
 def alternativeRankFrequency(data, n):
     """
@@ -248,11 +279,4 @@ def permute(l, permBound, measure=None, top=None):
         
     bestPerms.sort()
     return bestPerms
-
-
-
-
-
-
-
 

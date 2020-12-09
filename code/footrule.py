@@ -58,12 +58,15 @@ def run(data, params):
     cost = createCostMatrix(data, n, N)
 
     # run optimization algorithm from scipy library
-    _, ranking = linear_sum_assignment(cost)
-    # convert answer from np.array to tuple format
+    rows, cols = linear_sum_assignment(cost)
 
-    # TODO:correction factor because we use zero-indexing in createCostMatrix
-    off_by_one = np.ones(np.shape(ranking), dtype=int)
-    sigma = tuple(ranking + off_by_one)
+    # recover matching from linear assignment
+    ranking = [None] * n
+    for i,j in zip(rows,cols):
+        ranking[j] = i+1
+
+    # convert to tuple
+    sigma = tuple(ranking)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
