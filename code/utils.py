@@ -106,6 +106,60 @@ def piToTau(pi, sigma):
     return np.array(list(pi) + extension)
 
 
+def precedenceMatrix(data, n):
+    """
+    This functions computes the n by n precedence matrix 'q', where q[i,j] is the 
+    percentage of the top-lists for which candidate i is ranked before candidate j.
+    Note that if candidate i precedes candidate j in some ranking, that means 
+    i is preferred to j for the ranking.
+    --------------------------------------
+
+    Params
+
+    'data': Counter object 
+            The keys  in this Counter are tuple top-lists and the 
+            values are the mulitiplicities of each top-list. Both 
+            the elements in the tuples and the values are ints
+
+    'n': int
+         The number of candidates, which is also the number of ranks
+    ---------------------------------------
+
+    Returns 
+
+        'q': 2D n x n np.array
+            Precedence matrix specifying how often candidates 
+            appear before other candidates.
+    """
+    q = np.zeros((n,n))
+    allCandidates = {i for i in range(n)}
+
+    for x in data:
+        rankedCandidates = set()
+        for i in range(len(x)):
+            # Relabel so that candidates are in [0,n-1]
+            candidateOne = x[i] - 1
+            rankedCandidates.add(candidateOne)
+
+            for j in range(i+1,len(x)):
+                # Relabel so that candidates are in [0,n-1]
+                candidateTwo = x[j] - 1
+
+                # candidateOne precedes candidate two 
+                # once for each ranking identical to x,
+                # hence increment by frequency
+                q[candidateOne,candidateTwo] += data[x]
+
+        # Every candidate in ranking x are now in
+        # candidatesFromList. These candidates 
+        # precede all unranked candidates, and 
+        # the unranked candidates precede 
+        # no one
+        unrankedCandidates = allCandidates - rankedCandidates
+        for unrankedCandidate in unrankedCandidates:
+            for rankedCandidate in rankedCandidates:
+                q[rankedCandidate, unrankedCandidate] += data[x]
+    return q
 
 
 def alternativeRankFrequency(data, n):

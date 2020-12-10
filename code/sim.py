@@ -1,6 +1,6 @@
 import sys
 import ast
-import footrule, borda, scoreborda, random_sort, score_then_adjust, optimal
+import footrule, borda, scoreborda, random_sort, score_then_adjust, optimal, integer_program
 
 from collections import Counter
 from generate import MallowsSamplePoisson
@@ -96,6 +96,7 @@ class Simulation:
                 "Borda+": borda.run, 
                 "Score-Then-Borda+": scoreborda.run, 
                 "Score-Then-Adjust": score_then_adjust.run,
+                "Integer-Program" : integer_program.run
                 #"LocalSearch": localsearch.run
                 }
 
@@ -207,7 +208,7 @@ class Simulation:
         from particular algorithm in 'alg'
 
         """
-        #self.results.append(optimal.run(self.data, self.params))
+        # self.results.append(optimal.run(self.data, self.params))
 
         for func in algorithms:
             if func not in self.funcDict:
@@ -250,6 +251,7 @@ class Simulation:
         """
         arglen = len(args)
 
+        # Datset read from file
         if args[1] == "r":
             # setting label according to file name if real data
             self.params['label'] +=  args[2].split("/")[-1]
@@ -259,7 +261,7 @@ class Simulation:
             if arglen == 3:
                 self.params['seed'] = int(args[2])
 
-
+        # Synethically generated data
         elif args[1] == "s":
             params = self.parseListArg(args[2])
 
@@ -278,7 +280,6 @@ class Simulation:
             # Handle optional arguments
 
             # One optional argument
-            optionalArgErrMsg = "Optional arguments for simulated data must be either a seed (int) or ground list (s0)"
             if arglen == 4:
                 # The one optional argument is a seed
                 if args[3].isdigit():
@@ -288,10 +289,18 @@ class Simulation:
                     self.params['s0'] = self.parseListArg(args[3])
                 # Error!
                 else:
-                    print(optionalArgErrMsg)
+                    print("Optional arguments for simulated data must be either seed (int) or s0 (list)")
+            # Two optional arguments
             elif arglen == 5:
-                self.params['s0'] = self.parseListArg(args[3])
-                self.params['seed'] = int(args[4])
+                if args[3].isdigit():
+                    self.params['s0'] = self.parseListArg(args[3])
+                else:
+                    print("You have given two optional arguments. The fourth argument should be s0, which is of type list!")
+
+                if type(ast.literal_eval(args[4])) is list:
+                    self.params['s0'] = self.parseListArg(args[4])
+                else:
+                    print("You have given two optional arguments. The fifth argument should be seed, which is of type int!")
 
             # generate data
             self.data = self.genMallows(self.params)
@@ -312,7 +321,7 @@ class Simulation:
 
 if __name__ == '__main__':
     if not (3 <= len(sys.argv) <=  5):
-        print("wrong usage. Please do: python3 sim.py <s [OR] r>  <algo1,algo2=None, ...>  <[if s] n,N,theta,k>  <[if s] s0=None>  <[if r]: path/to/file.CSV>")
+        print("python3 sim.py [algo1,algo2,...] [s <OR> r]  [<if s> n,N,theta,k]  [<if s> s0]  [<if r>: path/to/file.CSV] seed")
     else:
         sim = Simulation()
         sim.main(sys.argv[1:])

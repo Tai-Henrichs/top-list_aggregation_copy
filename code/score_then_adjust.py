@@ -9,7 +9,7 @@ ALGORITHM_NAME = "Score-Then-Adjust"
 
 def run(data, params, epsilon = 1):
     """
-    This method implements the Score-Then-Adjust algorithm.
+    This method implements the Score-Then-Adjust EPTAS.
     -------------------------------------
 
     Params
