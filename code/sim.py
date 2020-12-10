@@ -1,9 +1,9 @@
 import sys
 import ast
-import footrule, borda, scoreborda, random_sort, score_then_adjust, optimal, integer_program
+import footrule, borda, scoreborda, random_sort, score_then_adjust, optimal, localsearch
 
 from collections import Counter
-from generate import MallowsSamplePoisson
+from generate import MallowsSamplePoisson, MallowsSampleTopK
 
 
 """
@@ -59,11 +59,13 @@ Usage: python3 sim.py [algo1,algo2,...] [s <OR> r]  [<if s> n,N,theta,k]  [<if s
 
 Examples:
 
-    python3 sim.py [Score-Then-Borda+] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] 0
+    python3 sim.py [OPTIMAL] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] 0
 
     python3 sim.py [RandomSort,Borda+,FootRule+] s [10,100,2,4] 
 
     python3 sim.py [FootRule+] r ../data/soi/ED-00001-00000001.csv
+
+    python3 sim.py [Score-Then-Adjust,0.2,0.4,0.5,Score-Then-Borda+] s [5,50,0.5]
 """
 
 # documentation for the follwing code is a little informal at the moment but will iteratively be
@@ -96,8 +98,8 @@ class Simulation:
                 "Borda+": borda.run, 
                 "Score-Then-Borda+": scoreborda.run, 
                 "Score-Then-Adjust": score_then_adjust.run,
-                "Integer-Program" : integer_program.run
-                #"LocalSearch": localsearch.run
+                "OPTIMAL" : optimal.run,
+                "Local-Search": localsearch.run
                 }
 
         self.data = None
@@ -109,8 +111,11 @@ class Simulation:
                 'k': None,
                 'theta': None,
                 's0': None,
-                'seed' : None
+                'seed' : None,
+                'mallows_topk' : False
                 }
+
+        self.epsilons = list()
 
 
 
@@ -125,7 +130,7 @@ class Simulation:
 
         out += "\nEXPERIMENTS:\n"
         for alg, acc, time in self.results:
-            out += f'{alg} ran in {time:.{precision}f} cpu milliseconds with a score of {acc:.{precision}f}\n'
+            out += f'{alg} ran in {time:.{precision}f} cpu seconds with a score of {acc:.{precision}f}\n'
         
         return out
 
@@ -144,8 +149,8 @@ class Simulation:
             f.write(f'{c[0]}, {c[1]}, {c[2]}\n') 
             f.close()
 
-        # TODO: might wanna modify this at some point for different datasets with different
-        # values of k and s0. Should not matter much for now
+        # TODO: might wanna modify this at some point for different datasets with 
+        # different values of k and s0. Should not matter much for now
 
 
     def genMallows(self, params):
@@ -157,8 +162,12 @@ class Simulation:
         Note: this separate method was created in order to swtich between poisson and topk
               in the future
         """
+        if params['mallows_topk']:
+            return MallowsSampleTopK(params['N'], params['n'], params['k'],
+                    theta=params['theta'], s0=params['s0'], seed=params['seed']).sample
 
-        return MallowsSamplePoisson(params['N'], params['n'], params['k'], theta=params['theta'], s0=params['s0'], seed=params['seed']).sample
+        return MallowsSamplePoisson(params['N'], params['n'], params['k'], 
+                theta=params['theta'], s0=params['s0'], seed=params['seed']).sample
 
 
 
@@ -208,15 +217,19 @@ class Simulation:
         from particular algorithm in 'alg'
 
         """
-        # self.results.append(optimal.run(self.data, self.params))
 
         for func in algorithms:
             if func not in self.funcDict:
                 print(f'incorrect function name! {func} was not found')
             alg = self.funcDict[func]
 
-            #passes Counter object dataset as well as data specs
-            # TODO: assumption that all algorithms return (<algorithm name>, <kendall tau distance>, <time recorded>)
+            # special case where we are running top-k, must run for all epsilons
+            if func == "Score-Then-Adjust":
+                for epsilon in self.epsilons:
+                    #passes Counter object dataset as well as data specs
+                    self.results.append(alg(self.data, self.params, epsilon))
+
+            # ordinary case
             self.results.append(alg(self.data, self.params)) 
 
 
@@ -240,6 +253,14 @@ class Simulation:
         return l
 
 
+    def isFloat(self, test_string):
+        try :
+            float(test_string)
+            return True
+        except :
+            return False
+
+
     def main(self, args):
         """
         This method takes in list of args and then calls genMallows() or parseCSV()
@@ -251,7 +272,16 @@ class Simulation:
         """
         arglen = len(args)
 
-        # Datset read from file
+        # parse algorithms and modify params if a Top-K instance
+        algs = self.parseListArg(args[0])
+        epsilons = [float(i) for i in algs if self.isFloat(i)]
+        if len(epsilons) != 0:
+            self.epsilons = epsilons
+            self.params['mallows_topk'] = True
+            algs = [i for i in algs if not self.isFloat(i)]
+
+
+        # if real dataset
         if args[1] == "r":
             # setting label according to file name if real data
             self.params['label'] +=  args[2].split("/")[-1]
@@ -261,7 +291,8 @@ class Simulation:
             if arglen == 3:
                 self.params['seed'] = int(args[2])
 
-        # Synethically generated data
+
+        # if synthetic dataset
         elif args[1] == "s":
             params = self.parseListArg(args[2])
 
@@ -312,10 +343,10 @@ class Simulation:
             print("wrong usage! second argument should be 'r' or 's'")
             return
 
-        #run all algorithms
-        self.handleFunc(self.parseListArg(args[0])) 
+        # run all functions
+        self.handleFunc(algs)
 
-        #write all results to files
+        # write all results to files
         self.writeToFile()
 
 
