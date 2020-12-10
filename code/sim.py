@@ -1,6 +1,6 @@
 import sys
 import ast
-import footrule, borda, scoreborda, random_sort, score_then_adjust, optimal
+import footrule, borda, scoreborda, random_sort, score_then_adjust, optimal, localsearch
 
 from collections import Counter
 from generate import MallowsSamplePoisson, MallowsSampleTopK
@@ -98,8 +98,8 @@ class Simulation:
                 "Borda+": borda.run, 
                 "Score-Then-Borda+": scoreborda.run, 
                 "Score-Then-Adjust": score_then_adjust.run,
-                "OPTIMAL" : optimal.run
-                #"LocalSearch": localsearch.run
+                "OPTIMAL" : optimal.run,
+                "Local-Search": localsearch.run
                 }
 
         self.data = None
@@ -130,7 +130,7 @@ class Simulation:
 
         out += "\nEXPERIMENTS:\n"
         for alg, acc, time in self.results:
-            out += f'{alg} ran in {time:.{precision}f} cpu milliseconds with a score of {acc:.{precision}f}\n'
+            out += f'{alg} ran in {time:.{precision}f} cpu seconds with a score of {acc:.{precision}f}\n'
         
         return out
 
