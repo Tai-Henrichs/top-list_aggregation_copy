@@ -38,9 +38,9 @@ def run(data, params, sigma=None):
         
         for b in range(n):
             # create the move
-            new_sigma = sigma
-            np.delete(new_sigma, index)
-            np.insert(new_sigma, b, cand) 
+            new_sigma = np.copy(sigma)
+            new_sigma = np.delete(new_sigma, index)
+            new_sigma = np.insert(new_sigma, b, cand) 
 
             # compute the distance of such move
             curr_cost = dist(new_sigma)
@@ -58,6 +58,7 @@ def run(data, params, sigma=None):
         order = np.random.permutation(n)
         # flag to be used
         moved = False
+        curr_cost = dist(sigma)
 
         for i in order:
             b = bestMove(i)
@@ -69,12 +70,12 @@ def run(data, params, sigma=None):
             # retrieve candidate
             cand = sigma[i]
             # move candidate from pos i to pos b
-            np.delete(sigma, i)
-            np.insert(sigma, b, cand)
+            sigma = np.delete(sigma, i)
+            sigma = np.insert(sigma, b, cand)
             
 
         # if not a single candidate was moved, exit loop
-        if not moved:
+        if not moved or dist(sigma) == curr_cost:
             break
 
     # sigma should be appropriately altered at this point
