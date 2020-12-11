@@ -86,7 +86,7 @@ if __name__ == "__main__":
     params['N'] = 5
     params['k'] = params['n']
 
-    data = { (0,1) : params['N']}
+    data = { (1,2) : params['N']}
     kemenyBound = lambda num : num == 0 or num == 1
 
     test(data, params, name, kemenyBound)
@@ -100,7 +100,7 @@ if __name__ == "__main__":
 
     perList = params['N'] / 2
 
-    data = { (0,1) : perList, (1,0) : perList}
+    data = { (1,2) : perList, (2,1) : perList}
     kemenyBound = lambda num : num == .5
 
     test(data, params, name, kemenyBound)
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
     perList = params['N'] / 2
 
-    candidates = tuple(i for i in range(params['n']))
+    candidates = tuple(i + 1 for i in range(params['n']))
     data = { candidates : perList, candidates[::-1] : perList}
     kemenyBound = lambda num : num == params['n']
 

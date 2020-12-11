@@ -89,9 +89,11 @@ def run(data, params):
     for unrankedCandidate in unrankedCandidates:
         sigma.setdefault(unrankedCandidate)
 
+    sigma = tuple(candidate for candidate in sigma)
+
     time_elapsed = (time.process_time() - start_time) * 1000
 
-    return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, tuple(sigma), n, N, s0), time_elapsed, sigma
+    return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed, sigma
 
 
 
