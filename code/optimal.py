@@ -83,11 +83,11 @@ def run(data, params):
     # different potential orderings of i, j, and k relative to each other
     for i,j,k in itertools.permutations(indices, r=3):
         model.addConstraint(plp.LpConstraint(
-                                        e=plp.LpAffineExpression(
-                                            [(x_vars[(i,j)], 1), (x_vars[(j,k)], 1), (x_vars[(k,i)], 1)]),
-                                        sense=plp.LpConstraintGE,
-                                        rhs=1,
-                                        name=f"Transitivity{separator}{i}{separator}{j}{separator}{k}"))
+                            e=plp.LpAffineExpression(
+                                [(x_vars[(i,j)], 1), (x_vars[(j,k)], 1), (x_vars[(k,i)], 1)]),
+                            sense=plp.LpConstraintGE,
+                            rhs=1,
+                            name=f"Transitivity{separator}{i}{separator}{j}{separator}{k}"))
     
     # Define the objective function for Kemeny
     # If a list ranks j before i, then the contributed cost is the number 
@@ -137,9 +137,8 @@ def run(data, params):
         index = n - frequency - 1
         sigma.insert(index, candidate)
 
-    # Everything has worked with the candidates starting at 0, 
-    # so add 1 to all candidates
-    sigma = tuple(candidate + 1 for candidate in sigma)
+    # Convert to tuple for consistency
+    sigma = tuple(sigma)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 

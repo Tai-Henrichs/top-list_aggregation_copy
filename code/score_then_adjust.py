@@ -52,8 +52,8 @@ def run(data, params, epsilon = 1):
 
     # Order candidates by non-increasing scores (descending order with lexicographic tie-breaking)
     candidateScores = utils.scores(data,n,N)
-    candidates = [i for i in range(1,n+1)]
-    candidates.sort(key=lambda i : candidateScores[i-1], reverse=True)
+    candidates = [i for i in range(n)]
+    candidates.sort(key=lambda i : candidateScores[i], reverse=True)
 
     permBound = (1 + (1.0 / epsilon)) * (params['k'] - 1)
     permBound = math.ceil(permBound)

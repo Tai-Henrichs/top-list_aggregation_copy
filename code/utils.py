@@ -137,18 +137,13 @@ def precedenceMatrix(data, n):
     for x in data:
         rankedCandidates = set()
         for i in range(len(x)):
-            # Relabel so that candidates are in [0,n-1]
-            candidateOne = x[i] - 1
-            rankedCandidates.add(candidateOne)
+            rankedCandidates.add(i)
 
             for j in range(i+1,len(x)):
-                # Relabel so that candidates are in [0,n-1]
-                candidateTwo = x[j] - 1
-
-                # candidateOne precedes candidate two 
+                # i precedes j
                 # once for each ranking identical to x,
                 # hence increment by frequency
-                q[candidateOne,candidateTwo] += data[x]
+                q[i,j] += data[x]
 
         # Every candidate in ranking x are now in
         # candidatesFromList. These candidates 
@@ -159,6 +154,7 @@ def precedenceMatrix(data, n):
         for unrankedCandidate in unrankedCandidates:
             for rankedCandidate in rankedCandidates:
                 q[rankedCandidate, unrankedCandidate] += data[x]
+
     return q
 
 
@@ -195,17 +191,14 @@ def alternativeRankFrequency(data, n):
     for x in data:
         # loop over each alternative index in a given top-list
         for i in range(len(x)):
-            # get alternative ID (and decrement for zero-index matrix)
-            alternative = x[i] - 1
-            #TODO: make all synthetic and real datasets type consists instead 
-            # of doing this
+            alternative = x[i]
+
             if type(alternative) != int:
                 alternative = int(alternative)
-            # make sure to increment by number of multiplicities of current top-list
+            
             p[alternative, i] += data[x]
 
-    # remark: p is zero indexed for rankings and alternatives. The necessary change of
-    # decrementing all alternative IDs by one was made.
+    # remark: p is zero indexed for rankings and alternatives.
     return p 
 
 
@@ -242,7 +235,7 @@ def unrankedAlternatives(data, n, N):
         A tuple of the alternatives that never appear in any top-list
     """
     off_by_one =  np.where(np.isclose(scores(data,n,N), 0))[0].tolist()
-    return tuple(i+1 for i in off_by_one)
+    return tuple(off_by_one)
 
 
 

@@ -63,7 +63,7 @@ def run(data, params):
     # recover matching from linear assignment
     ranking = [None] * n
     for i,j in zip(rows,cols):
-        ranking[j] = i+1
+        ranking[j] = i
 
     # convert to tuple
     sigma = tuple(ranking)
@@ -115,16 +115,6 @@ def createCostMatrix(data, n, N):
             for r in range(j):
                 summ += (j-r) * p[i, r]     # following algorithm formula
             arr[i,j] = summ
-
-    ##alternatives that do not get ranked at all must have infinite cost
-    #infcostalts = utils.unrankedAlternatives(p)
-    #print(infcostalts)
-
-    ##TODO: assigns infinite cost for all candidates that were not ranked by any
-    ## top list in the input
-    #infrow = np.ones((n,)) 
-    #for alt in infcostalts:
-    #    arr[alt-1] = infrow
 
     return arr
 

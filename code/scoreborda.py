@@ -80,7 +80,7 @@ def run(data, params):
     # helper method that applies borda rule within each partiton
     def bordaHelper(arr):
         # create tuple of avg (rank, candidate) pairs
-        tups = [(avg_ranks[i], i+1) for i in arr]
+        tups = [(avg_ranks[i], i) for i in arr]
         # sort by increasing avg rank
         tups.sort(key= lambda x: x[0])
 

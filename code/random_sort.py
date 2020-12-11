@@ -83,7 +83,8 @@ def run(data, params):
             rankedCanidates.add(candidate)
     
     # Finish by adding candidates that are never ranked
-    allCandidates = {i + 1 for i in range(n)}
+    # in a top-list
+    allCandidates = {i for i in range(n)}
     unrankedCandidates = allCandidates - rankedCanidates
 
     for unrankedCandidate in unrankedCandidates:

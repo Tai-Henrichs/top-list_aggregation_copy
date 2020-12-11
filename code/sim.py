@@ -165,7 +165,7 @@ class Simulation:
         if params['mallows_topk']:
             return MallowsSampleTopK(params['N'], params['n'], params['k'],
                     theta=params['theta'], s0=params['s0'], seed=params['seed']).sample
-
+        
         return MallowsSamplePoisson(params['N'], params['n'], params['k'], 
                 theta=params['theta'], s0=params['s0'], seed=params['seed']).sample
 
@@ -197,12 +197,22 @@ class Simulation:
 
             for line in f:
                 #convert line to list of ints and ignore newline character
-                toplist = [int(i) for i in line.split(',')]
-                #preferences ordering does not include its count
-                toptuple = tuple(toplist[1:])
+                parsedLine = [int(i) for i in line.split(',')]
 
+                # list frequency
+                frequency = parsedLine[0]
+
+                # the preference list, excluding the frequency
+                topList = parsedLine[1:]
+           
+                # Subtract one to ensure all candidates 
+                # are in [0,1,2,...,n-1] given PrefLib data 
+                # provides rankings with candidates 
+                # in [1,2,3,...,n]
+                toptuple = tuple(i - 1 for i in topList)
+                
                 #assign count to ordering and put it in Counter object
-                c[toptuple] = toplist[0]
+                c[toptuple] = frequency
 
         return c
 

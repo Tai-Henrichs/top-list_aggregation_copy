@@ -35,7 +35,7 @@ class MallowsSample:
         # unlike the data genereted from mallows_kendall.py
         # Since this relabels the names of candidates without changing their 
         # relative rankings, this does not affect results
-        return [tuple(ranking[~np.isnan(ranking)].astype(int) + 1)  
+        return [tuple(ranking[~np.isnan(ranking)].astype(int))  
                 for k, freq in k_distribution.items()  
                     for ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0, seed)]
 
@@ -94,16 +94,16 @@ class MallowsSampleTopK(MallowsSample):
     (theta or phi).
     Parameters
     ----------
-    n: int
-    The number of candidates considered by rankers. Note that
-    k <= n, since rankers cannot create preference lists that
-    rank more candidates than exist.
     m: int
     The number of rankings to generate.
     theta: float, optional (if phi given)
     The dispersion parameter theta
     phi: float, optional (if theta given)
     The dispersion parameter phi
+    n: int
+    The number of candidates considered by rankers. Note that
+    k <= n, since rankers cannot create preference lists that
+    rank more candidates than exist.
     k: int
     number of known positions of items for the rankings.
     s0: ndarray

@@ -15,10 +15,10 @@ def run(data, params, sigma=None):
     s0 = params['s0']
 
 
-    # if sigma is not given by previous algorithm, make it a random perm
+    # if sigma is not given by previous algorithm, 
+    # make it a random starting permutation
     if sigma == None:
         sigma = np.random.permutation(n)
-
 
     # simply call to distance function
     def dist(s):
@@ -77,9 +77,6 @@ def run(data, params, sigma=None):
         # if not a single candidate was moved, exit loop
         if not moved or dist(sigma) == curr_cost:
             break
-
-    # sigma should be appropriately altered at this point
-    sigma = tuple(candidate + 1 for candidate in sigma)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 

@@ -47,8 +47,7 @@ def run(data, params):
     N = params['N']
     s0 = params['s0']
 
-    # arg (index+1) sort by increasing avg rank 
-    sigma = np.argsort(utils.avgRanks(data, n, N)) + np.ones((n,)) 
+    sigma = np.argsort(utils.avgRanks(data, n, N))
     
     # end timer
     time_elapsed = (time.process_time() - start) * 1000
