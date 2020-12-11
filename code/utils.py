@@ -71,9 +71,18 @@ def kendall_tau(rank_a,rank_b):
     tau = 0
     n_candidates = len(rank_a)
 
+    aPos = dict()
+    bPos = dict()
+    for i in range(n_candidates):
+        a_candidate = rank_a[i]
+        aPos[a_candidate] = i
+
+        b_candidate = rank_b[i]
+        bPos[b_candidate] = i
+
     for i, j in itertools.combinations(range(n_candidates), 2):
-        tau += (np.sign(rank_a[i] - rank_a[j]) ==
-                -np.sign(rank_b[i] - rank_b[j]))
+        tau += (np.sign(aPos[i] - aPos[j]) ==
+                -np.sign(bPos[i] - bPos[j]))
 
     return tau
 

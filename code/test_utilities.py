@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # pair-wise disagreements
     #
     # 0: 3,4,6,9 = 4
-    # 1: 8,7,2,0,3,4,6,9 = 8
+    # 1: 8,7,2,3,4,6,9 = 7
     # 2: 3,4,6,9 = 4
     # 3: 4,6,9 = 3
     # 4: 6,9 = 2
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     # 7: = 0
     # 8: 7 = 1
     # 9: = 0
-    solution = 4 + 8 + 4 + 3 + 2 + 4 + 1 + 0 + 1 + 0
+    solution = 4 + 7 + 4 + 3 + 2 + 4 + 1 + 0 + 1 + 0
 
     kendallTests[(listOne, listTwo)] = (name, solution)
 
