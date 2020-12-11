@@ -281,6 +281,12 @@ def avgRanks(data, n, N):
         
     return ranks
 
+def lineGenerator(length):
+    line = ""
+    for i in range(length):
+        line += "-"
+    return line
+
 def permute(l, permBound, measure=None, top=None):
     """
     Considers all possible permutations of the items in l 

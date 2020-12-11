@@ -35,9 +35,9 @@ class MallowsSample:
         # unlike the data genereted from mallows_kendall.py
         # Since this relabels the names of candidates without changing their 
         # relative rankings, this does not affect results
-        return [tuple(ranking[~np.isnan(ranking)].astype(int) + 1) for 
-                k, freq in k_distribution.items() for 
-                    ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0, seed)]
+        return [tuple(ranking[~np.isnan(ranking)].astype(int) + 1)  
+                for k, freq in k_distribution.items()  
+                    for ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0, seed)]
 
     """This class represents a single sample generated from a
     Mallows Models adapted to top-k rankings given a parameter of dispersion
@@ -203,9 +203,9 @@ class MallowsSamplePoisson(MallowsSample):
 # Note: Primarily for testing and debugging.
 if __name__ == '__main__':
     # General Sample parameters
-    m = 20
+    m = 10
     n = 10
-    thetas = (.01, .1)
+    thetas = (.001, .1)
 
     k = 5
     lda = 2

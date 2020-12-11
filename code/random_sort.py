@@ -75,12 +75,24 @@ def run(data, params):
     # already been added to the top-list
     # Relies on dictionaries being ordered 
     # as of Python 3.7
-    sigma = {}
+    sigma = dict()
+    rankedCanidates = set()
     for l in topLists:
         for candidate in l:
             sigma.setdefault(candidate)
-    sigma = tuple(sigma)
+            rankedCanidates.add(candidate)
+    
+    # Finish by adding candidates that are never ranked
+    allCandidates = {i + 1 for i in range(n)}
+    unrankedCandidates = allCandidates - rankedCanidates
+
+    for unrankedCandidate in unrankedCandidates:
+        sigma.setdefault(unrankedCandidate)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
-    return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed
+    return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, tuple(sigma), n, N, s0), time_elapsed, sigma
+
+
+
+    

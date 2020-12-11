@@ -98,8 +98,8 @@ class Simulation:
                 "Borda+": borda.run, 
                 "Score-Then-Borda+": scoreborda.run, 
                 "Score-Then-Adjust": score_then_adjust.run,
-                "OPTIMAL" : optimal.run,
-                "Local-Search": localsearch.run
+                "Local-Search": localsearch.run,
+                "Optimal" : optimal.run
                 }
 
         self.data = None
@@ -227,10 +227,14 @@ class Simulation:
             if func == "Score-Then-Adjust":
                 for epsilon in self.epsilons:
                     #passes Counter object dataset as well as data specs
-                    self.results.append(alg(self.data, self.params, epsilon))
-
+                    name, averageKendallTauDist, time, _ = alg(self.data, self.params, epsilon)
+                    self.results.append((name, averageKendallTauDist, time))
             # ordinary case
-            self.results.append(alg(self.data, self.params)) 
+            else:
+                name, averageKendallTauDist, time, _ = alg(self.data, self.params)
+                self.results.append((name, averageKendallTauDist, time))
+            
+            
 
 
 

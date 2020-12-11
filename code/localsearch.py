@@ -82,5 +82,5 @@ def run(data, params, sigma=None):
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
-    return ALGORITHM_NAME, dist(sigma), time_elapsed
+    return ALGORITHM_NAME, dist(sigma), time_elapsed, sigma
     
