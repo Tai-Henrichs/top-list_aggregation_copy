@@ -89,7 +89,7 @@ def run(data, params):
     for unrankedCandidate in unrankedCandidates:
         sigma.setdefault(unrankedCandidate)
 
-    sigma = tuple(candidate for candidate in sigma)
+    sigma = tuple(candidate for candidate in sigma.keys())
 
     time_elapsed = (time.process_time() - start_time) * 1000
 

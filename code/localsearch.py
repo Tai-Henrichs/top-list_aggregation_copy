@@ -79,6 +79,7 @@ def run(data, params, sigma=None):
             break
 
     # sigma should be appropriately altered at this point
+    sigma = tuple(candidate + 1 for candidate in sigma)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 

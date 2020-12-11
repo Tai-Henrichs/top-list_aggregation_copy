@@ -39,22 +39,29 @@ def test(data, params, testName, kemenyBound=None):
 
     allScores = dict()
     for name, func in algorithms.items():
-        name, kemenyScore, _, sigma = func(data, params)
-        allScores.setdefault(name, kemenyScore)
+        _ , kemenyScore, _, sigma = func(data, params)
+
+        allScores.setdefault(name, (kemenyScore, sigma))
 
         if kemenyBound is not None and not kemenyBound(kemenyScore):
-            print(f"{name} has an invalid Kemeny-score of {kemenyScore}")
+            print(f"{name} has an invalid Kemeny-score of {kemenyScore}\n")
             testPassed = False
         
         if len(sigma) != numCandidates:
-            print(f"{name} produced an incomplete ranking: {sigma}")
+            print(f"{name} produced an incomplete ranking: {sigma}\n")
             testPassed = False 
     
-    optimalScore = allScores["OPTIMAL_SOLUTION"]
-    for name, score in allScores.items():
+    optimalScore = allScores["Optimal"][0]
+    optimalList = allScores["Optimal"][1]
+
+    for name, results in allScores.items():
+        score, ranking = results 
+
         if optimalScore > score:
             print(
-            f"{name}'s score of {score} beats the optimal score {optimalScore}!")
+            f"{name}'s score of {score} beats the optimal score {optimalScore}!\n"
+            f"Optimal list: {optimalList}\n{name}'s list: {ranking}\n"
+            )
 
             testPassed = False
 
@@ -131,7 +138,7 @@ if __name__ == "__main__":
     perList = params['N'] / 2
 
     candidates = tuple(i + 1 for i in range(params['n']))
-    data = { candidates : perList, candidates[::-1] : perList}
+    data = {candidates:perList, candidates[::-1]:perList}
     kemenyBound = lambda num : num == params['n']
 
     test(data, params, name)
@@ -144,8 +151,8 @@ if __name__ == "__main__":
     params['k'] = math.ceil(params['n'] / 3)
 
     data = generate.MallowsSampleTopK(
-                    params['N'],
                     params['n'],
+                    params['N'],
                     params['k'],
                     theta=theta,
                     seed=seed
@@ -162,12 +169,13 @@ if __name__ == "__main__":
     # Set to one to guarantee that 
     # score-then-adjust will not 
     # attempt impossible 
-    # permutations
+    # permutations, since top-lists 
+    # are of varying sizes
     params['k'] = 1
 
     data = generate.MallowsSamplePoisson(
-                    params['N'],
                     params['n'],
+                    params['N'],
                     5,
                     theta=theta,
                     seed=seed

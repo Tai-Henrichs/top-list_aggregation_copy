@@ -65,8 +65,6 @@ def run(data, params):
     # candidate i before candidate j, or it does not
     x_vars = {(i,j) : plp.LpVariable(cat=plp.LpBinary,name=f"{i}{separator}{j}") for (i,j) in indexPermutations}
 
-    # print(f"The variables{x_vars}")
-
     # Set constraints
 
     # Any valid full-ranking has no ties, so we must have that 
@@ -111,8 +109,6 @@ def run(data, params):
     # msg = 0 suppresses log information
     model.solve(plp.PULP_CBC_CMD(msg=0))
 
-    #print(f"Pulp objective value calc: {model.objective.value()}")
-
     # Reconstruct ranking from solution.
     # Reconstruction is necessary for consistency with 
     # other algorithms, since they perform reconstruction
@@ -129,8 +125,6 @@ def run(data, params):
         if var.varValue == 1:
             precedenceFreqency[i] += 1
 
-    #print(precedenceFreqency)
-
     sigma = list()
     for candidate, frequency in precedenceFreqency.items():
         # In the final list, candidate must precede 
@@ -143,7 +137,9 @@ def run(data, params):
         index = n - frequency - 1
         sigma.insert(index, candidate)
 
-    #print(f"Final list{sigma}")
+    # Everything has worked with the candidates starting at 0, 
+    # so add 1 to all candidates
+    sigma = tuple(candidate + 1 for candidate in sigma)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
