@@ -143,16 +143,15 @@ def precedenceMatrix(data, n):
     q = np.zeros((n,n))
     allCandidates = {i for i in range(n)}
 
-    for x in data:
+    for topList in data:
         rankedCandidates = set()
-        for i in range(len(x)):
-            rankedCandidates.add(i)
+        for i in range(len(topList)):
+            candidateOne = topList[i]
+            rankedCandidates.add(candidateOne)
 
-            for j in range(i+1,len(x)):
-                # i precedes j
-                # once for each ranking identical to x,
-                # hence increment by frequency
-                q[i,j] += data[x]
+            for j in range(i+1,len(topList)):
+                candidateTwo = topList[j]
+                q[candidateOne,candidateTwo] += data[topList]
 
         # Every candidate in ranking x are now in
         # candidatesFromList. These candidates 
@@ -162,7 +161,7 @@ def precedenceMatrix(data, n):
         unrankedCandidates = allCandidates - rankedCandidates
         for unrankedCandidate in unrankedCandidates:
             for rankedCandidate in rankedCandidates:
-                q[rankedCandidate, unrankedCandidate] += data[x]
+                q[rankedCandidate, unrankedCandidate] += data[topList]
 
     return q
 
