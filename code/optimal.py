@@ -63,7 +63,7 @@ def run(data, params):
 
     # x_{i,j} is a binary variable since the full-ranking either places 
     # candidate i before candidate j, or it does not
-    x_vars = {(i,j) : plp.LpVariable(cat=plp.LpBinary,name=f"{i}{separator}{j}") for (i,j) in indexPermutations}
+    x_vars = {(i,j) : plp.LpVariable(cat=plp.LpBinary,name=f"{i}{separator}{j}") for i,j in indexPermutations}
 
     # Set constraints
 
@@ -88,7 +88,7 @@ def run(data, params):
                             sense=plp.LpConstraintGE,
                             rhs=1,
                             name=f"Transitivity{separator}{i}{separator}{j}{separator}{k}"))
-    
+
     # Define the objective function for Kemeny
     # If a list ranks j before i, then the contributed cost is the number 
     # of voters that ranked i before j, which is precedenceMatrix[i,j]
@@ -106,8 +106,11 @@ def run(data, params):
     model.sense = plp.LpMinimize
     model.setObjective(kendall_dist)
 
+    # print(model)
+
     # msg = 0 suppresses log information
     model.solve(plp.PULP_CBC_CMD(msg=0))
+    print (f"Objective value{plp.value(model.objective)}")
 
     # Reconstruct ranking from solution.
     # Reconstruction is necessary for consistency with 
@@ -125,7 +128,7 @@ def run(data, params):
         if var.varValue == 1:
             precedenceFreqency[i] += 1
 
-    sigma = list()
+    sigma = [-1 for i in range(n)]
     for candidate, frequency in precedenceFreqency.items():
         # In the final list, candidate must precede 
         # frequency candidates. One is subtracted since 
@@ -135,7 +138,8 @@ def run(data, params):
         # the candidate that precedes everyone would precede 
         # 9 candidates since they don't precede themselves. 
         index = n - frequency - 1
-        sigma.insert(index, candidate)
+        sigma[index] = candidate
+        
 
     # Convert to tuple for consistency
     sigma = tuple(sigma)

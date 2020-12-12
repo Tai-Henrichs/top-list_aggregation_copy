@@ -3,6 +3,7 @@ import itertools
 import generate
 import math
 import utils
+import random
 
 def test(data, params, testName, kemenyBound=None):
     """Execute tests on all implemented algorithms using 
@@ -87,12 +88,14 @@ def test(data, params, testName, kemenyBound=None):
 if __name__ == "__main__":
     data = dict()
     seed = 1
+    random.seed(seed) 
+
     theta = .01
 
     params = {'n': None, 'N': None, 'seed' : seed, 's0' : None, 'k' : None}
 
     # Test One
-    name = "Simple All Possible Lists"
+    name = "Simple Full List"
 
     params['n'] = 2
     params['N'] = 5
@@ -152,14 +155,19 @@ if __name__ == "__main__":
     name = "Mallows Top-K"
 
     params['n'] = 10
+    s0 = [i for i in range(params['n'])]
+    random.shuffle(s0)
+
     params['N'] = params['n'] * 4
     params['k'] = math.ceil(params['n'] / 3)
+    params['s0'] = s0
 
     data = generate.MallowsSampleTopK(
                     params['N'],
                     params['n'],
                     params['k'],
                     theta=theta,
+                    s0 = params['s0'],
                     seed=seed
                     ).sample 
     
@@ -183,10 +191,56 @@ if __name__ == "__main__":
                     params['n'],
                     5,
                     theta=theta,
+                    s0 = params['s0'],
                     seed=seed
                     ).sample
     
     test(data, params, name)
+
+    # Test Six
+    name = "Fixed Top-k-lists simple"
+
+    params['n'] = 10
+    params['N'] = params['n'] * 4
+    perList = params['N']
+
+    params['k'] = 1
+
+    data = {(5,):perList}
+
+    kemenyBound = lambda num : 0 <= num <= params['n']
+    
+    test(data, params, name)
+
+    # Test Seven
+    name = "Fixed Top-k-Lists Medium"
+
+    params['n'] = 10
+    params['N'] = params['n'] * 4
+    perList = params['N'] / 2
+
+    params['k'] = 5
+
+    data = {(1,2,3,4,5):perList, (2,3,4,5,6):perList}
+    
+    test(data, params, name)
+
+    # Test Eight
+    name = "Variable Top-k-Lists Simple"
+
+    params['n'] = 10
+    params['N'] = params['n'] * 4
+    perList = params['N'] / 4
+
+    # Again, to avoid errors from 
+    # score-then-adjust
+    params['k'] = 1
+
+    data = {(9,):perList, (2,3):perList, (1,):perList, (4,5,6):perList}
+    
+    test(data, params, name)
+
+
 
 
     
