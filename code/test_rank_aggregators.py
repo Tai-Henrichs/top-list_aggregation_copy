@@ -7,7 +7,7 @@ import random
 
 def test(data, params, testName, kemenyBound=None):
     """Execute tests on all implemented algorithms using 
-       provided inputs. Performs various sanity checks 
+       provided inputs. Performs various checks 
        on the results.
 
         Parameters
@@ -77,13 +77,13 @@ def test(data, params, testName, kemenyBound=None):
 # This file is for executing standardized tests 
 # on all voting methods. None of the tests verify 
 # the correctness of the output lists selected 
-# by algorithms, only performing basic sanity 
+# by algorithms, only performing basic 
 # checks. For some tests, this is possible by 
 # construction - any valid answer must produce 
 # the same Kemeny-ranking for certain inputs.
 #
-# The exception to pure sanity checking 
-# is the optimal algorithm, which is required to 
+# The exception is the optimal algorithm, 
+# which is required to 
 # perform no worse than any other alogorithm.
 if __name__ == "__main__":
     data = dict()
@@ -145,7 +145,10 @@ if __name__ == "__main__":
 
     perList = params['N'] / 2
 
-    candidates = tuple(i for i in range(params['n']))
+    candidates = [i for i in range(params['n'])]
+    random.shuffle(candidates)
+    candidates = tuple(candidates)
+
     data = {candidates:perList, candidates[::-1]:perList}
     kemenyBound = lambda num : num == params['n']
 

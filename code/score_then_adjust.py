@@ -1,9 +1,7 @@
 import utils
 import time
-import numpy as np
-import operator
 import math
-
+import generalized_integer_program as ip
 
 ALGORITHM_NAME = "Score-Then-Adjust"
 
@@ -57,18 +55,14 @@ def run(data, params, epsilon = 1):
 
     permBound = (1 + (1.0 / epsilon)) * (params['k'] - 1)
     permBound = math.ceil(permBound)
-    # Consider all possible permutations of the sorted list of candidates, 
-    # only allowing the first permBound candidates to be shifted in their locations
-    # Select the permutation that minimizes kendall-tau distance
-    
-    # Multiply by negative one because utils.permute maximizes the objective function
-    # So, to minimize Kendall-Tau, we should maximize the inverse of Kendall-Tau
-    invertedKentallTau = lambda l : -1.0 * utils.generalizedKendallTauDistance(data, l, n, N, s0)
 
-    # permute returns a list containing (top = 1) tuple
-    # This assigns the second element of the first tuple to 
-    # sigma because that is the permutation that minimizes kendall-tau
-    sigma = utils.permute(candidates, permBound, measure=invertedKentallTau, top=1)[0][1]
+    if permBound >= 1:
+        # Consider all possible permutations of the sorted list of candidates, 
+        # only allowing the first permBound candidates to be shifted in their locations
+        # Select the permutation that minimizes kendall-tau distance
+        sigma = ip.run(data, params, candidates, permBound)
+    else:
+        sigma = candidates
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
