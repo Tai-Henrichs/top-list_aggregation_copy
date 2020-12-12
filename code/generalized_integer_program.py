@@ -1,5 +1,3 @@
-import numpy as np
-import time
 import utils
 import pulp as plp 
 import itertools
@@ -61,13 +59,17 @@ def run(data, params, baseList=None, permBound=None):
     if permBound is None or permBound > n or baseList is None:
         permBound = n
 
-    model = plp.LpProblem("Kemeny Integer Program")
+    # Spaces are not supported by pulp, use '_' 
+    # to separate names instead
+    separator = "_"
+
+    model = plp.LpProblem(f"Kemeny{separator}Integer{separator}Program")
 
     indices = tuple(i for i in range(permBound))
     indexPermutations = tuple(pair for pair in itertools.permutations(indices, r=2))
     indexCombinations = tuple(pair for pair in itertools.combinations(indices, r=2))
     
-    separator = "_"
+    
 
     # Overview: First, compute the top-permBound-list that has the minimum average kendall-Tau 
     # distance to the top-lists in data using integer-programming. Second, append the 
@@ -91,7 +93,7 @@ def run(data, params, baseList=None, permBound=None):
                                 [(x_vars[(i,j)], 1), (x_vars[(j,i)], 1)]),
                             sense=plp.LpConstraintEQ,
                             rhs=1,
-                            name=f"Strict_ranking_{i}{separator}{j}"))
+                            name=f"Strict{separator}ranking{separator}{i}{separator}{j}"))
 
     # Enforce transitivity: if i precedes j, and j precedes k, i must precede k
     # Uses permutations because enforicing transitivity requires considering 
@@ -138,6 +140,9 @@ def run(data, params, baseList=None, permBound=None):
         if var.varValue == 1:
             precedenceFreqency[i] += 1
 
+    # -1 to make it evident that something is broken
+    # if the final output still contains a -1, since 
+    # that is an invalid candidate label
     sigma = [-1 for i in indices]
     for candidate, frequency in precedenceFreqency.items():
         # In the final list, candidate must precede 
