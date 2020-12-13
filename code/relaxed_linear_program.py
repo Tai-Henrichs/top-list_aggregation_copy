@@ -1,16 +1,16 @@
-import utils
 import time
-import math
 import integer_program as ip
+import utils
 
-ALGORITHM_NAME = "Score-Then-Adjust"
+ALGORITHM_NAME = "Linear-Programming-Relaxation"
 
-def run(data, params, epsilon = 1):
+def run(data, params):
     """
-    This method implements the Score-Then-Adjust EPTAS.
-    Note this algorithm is an EPTAS for top-list 
-    aggregation only when all top-lists are of 
-    equal lengths.
+    This method implements a linear program that relaxes
+    the integer program that is used to find the 
+    optimal full-ranking that minimizes 
+    average Kendall-Tau distance to input 
+    top-lists. 
     -------------------------------------
 
     Params
@@ -51,41 +51,8 @@ def run(data, params, epsilon = 1):
     # (distribution is drawn off this full ranking)
     s0 = params['s0']
 
-    sigma = scoreThenAdjustBase(data, params, epsilon, False)
-    
+    sigma = ip.solve(data, params, lpRelaxation=True)
+
     time_elapsed = (time.process_time() - start_time) * 1000
 
     return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed, sigma
-
-def scoreThenAdjustBase(data, params, epsilon, relax):
-    n = params['n']
-    N = params['N']
-
-    # Order candidates by non-increasing scores (descending order with lexicographic tie-breaking)
-    candidateScores = utils.scores(data,n,N)
-    sigma = [i for i in range(n)]
-    sigma.sort(key=lambda i : candidateScores[i], reverse=True)
-
-    permBound = (1 + (1.0 / epsilon)) * (params['k'] - 1)
-    permBound = math.ceil(permBound)
-
-    if permBound >= 1:
-        # Consider all possible permutations of the sorted list of candidates, 
-        # only allowing the first permBound candidates to be shifted in their locations
-        # Select the permutation that minimizes kendall-tau distance
-        sigma = ip.solve(data, params, baseList=sigma, permBound=permBound, lpRelaxation=relax)
-
-    return sigma
-
-
-
-
-     
-
-
-    
-
-
-
-
-

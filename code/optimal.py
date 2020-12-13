@@ -1,8 +1,6 @@
-import numpy as np
 import time
+import integer_program as ip
 import utils
-import generalized_integer_program as ip
-import itertools
 
 ALGORITHM_NAME = "OPTIMAL_SOLUTION"
 
@@ -51,7 +49,7 @@ def run(data, params):
     # (distribution is drawn off this full ranking)
     s0 = params['s0']
 
-    sigma = ip.run(data, params)
+    sigma = ip.solve(data, params)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 

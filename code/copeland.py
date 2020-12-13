@@ -1,16 +1,13 @@
-import utils
+import utils 
 import time
-import math
-import integer_program as ip
 
-ALGORITHM_NAME = "Score-Then-Adjust"
+ALGORITHM_NAME = "Copeland"
 
 def run(data, params, epsilon = 1):
     """
-    This method implements the Score-Then-Adjust EPTAS.
-    Note this algorithm is an EPTAS for top-list 
-    aggregation only when all top-lists are of 
-    equal lengths.
+    This method implements Copeland's voting rule, which 
+    orders candidates from most to least pairwise contest 
+    wins. 
     -------------------------------------
 
     Params
@@ -51,41 +48,25 @@ def run(data, params, epsilon = 1):
     # (distribution is drawn off this full ranking)
     s0 = params['s0']
 
-    sigma = scoreThenAdjustBase(data, params, epsilon, False)
-    
+    # Order candidates by non-decreasing pair-wise contest wins 
+    # (ascending order with lexicographic tie-breaking)
+    precedenceMatrix = utils.precedenceMatrix(data, n)
+
+    def totalPairwiseVictories(i):
+        totalVictories = 0
+        for j in range(n):
+            # If candidates i and j beat each 
+            # other an equal number of times, i and j 
+            # each have a victory
+            if precedenceMatrix[i,j] >= precedenceMatrix[j,i]:
+                totalVictories += 1
+        return totalVictories
+
+    candidates = [i for i in range(n)]
+    candidates.sort(key=totalPairwiseVictories, reverse=False)
+
+    sigma = tuple(candidates)
+
     time_elapsed = (time.process_time() - start_time) * 1000
 
     return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed, sigma
-
-def scoreThenAdjustBase(data, params, epsilon, relax):
-    n = params['n']
-    N = params['N']
-
-    # Order candidates by non-increasing scores (descending order with lexicographic tie-breaking)
-    candidateScores = utils.scores(data,n,N)
-    sigma = [i for i in range(n)]
-    sigma.sort(key=lambda i : candidateScores[i], reverse=True)
-
-    permBound = (1 + (1.0 / epsilon)) * (params['k'] - 1)
-    permBound = math.ceil(permBound)
-
-    if permBound >= 1:
-        # Consider all possible permutations of the sorted list of candidates, 
-        # only allowing the first permBound candidates to be shifted in their locations
-        # Select the permutation that minimizes kendall-tau distance
-        sigma = ip.solve(data, params, baseList=sigma, permBound=permBound, lpRelaxation=relax)
-
-    return sigma
-
-
-
-
-     
-
-
-    
-
-
-
-
-
