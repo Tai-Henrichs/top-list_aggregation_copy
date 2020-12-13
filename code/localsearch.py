@@ -20,34 +20,78 @@ def run(data, params, sigma=None):
     if sigma == None:
         sigma = np.random.permutation(n)
 
-    # simply call to distance function
-    def dist(s):
-        s = tuple(s)
-        return utils.generalizedKendallTauDistance(data, s, n, N, s0)
+    precedenceMatrix = utils.precedenceMatrix(data,n)
 
+    def disagreements(fullRanking, oldPosition, newPosition):
+        """
+        Let R be the ranking that results from  placing 
+        the candidate at oldPosition in fullRanking at 
+        newPosition, still within fullRanking. 
+        Return the number of pairwise disagreements 
+        between R and top-lists in data
+        concerning the rank of 'candidate'. 
+        --------------------------------------
 
+        Params
+
+        'fullRanking': list or tuple of ints
+                A ranking of all candidates.
+
+        'oldPosition': int
+                Index into fullRanking 
+                that stores the candidate being 
+                swapped.
+
+        'newPosition': int
+                Index where the candidate 
+                fullRanking[oldPosition]
+                is to be moved for 
+                computing pairwise disagreements.
+        ---------------------------------------
+
+        Returns int
+        """
+        disagreements = 0
+        candidate = fullRanking[oldPosition]
+
+        # Count top-lists that place candidates 
+        # preceeding candidate in the given 
+        # partialRanking after candidate
+        for i in range(newPosition):
+            otherCandidate = fullRanking[i]
+            # otherCandidate may equal candidate (if newPosition > oldPosition), 
+            # but then precedenceMatrix[candidate,otherCandidate] will be 0
+            disagreements += precedenceMatrix[candidate,otherCandidate]
+
+        # Count top-lists that place candidates 
+        # ranked after candidate in the given 
+        # partialRanking before candidate
+        for i in range(newPosition, len(fullRanking)):
+            otherCandidate = fullRanking[i]
+            # otherCandidate may equal candidate (if newPosition < oldPosition), 
+            # but then precedenceMatrix[candidate,otherCandidate] will be 0
+            disagreements += precedenceMatrix[otherCandidate,candidate]
+
+        return disagreements
+    
     def bestMove(index):
-        # initialize min_cost to infinity
-        min_cost = float('inf')
-        # get candidate at index to be moved later, this doesn't change
-        # during the execution of this helper function
-        cand = sigma[index]
-
         # set new_index default value to be -1
         new_index = -1
-        
-        for b in range(n):
-            # create the move
-            new_sigma = np.copy(sigma)
-            new_sigma = np.delete(new_sigma, index)
-            new_sigma = np.insert(new_sigma, b, cand) 
 
-            # compute the distance of such move
-            curr_cost = dist(new_sigma)
-            # if better than before, update. Note new_index will reupdate
-            # to index if there does not exist any better move
+        # get cost at current index 
+        # (to ensure that a new_index 
+        # selected below does not tie the 
+        # cost of leaving a candidate 
+        # unmoved)
+        oldCost = disagreements(sigma,index,index)
+        min_cost = oldCost
+        
+        for i in range(n):
+            curr_cost = disagreements(sigma, index, i)
+
+            # if better than before, update
             if curr_cost < min_cost:
-                new_index = b
+                new_index = i
                 min_cost = curr_cost
 
         return new_index if new_index != index else -1
@@ -58,7 +102,6 @@ def run(data, params, sigma=None):
         order = np.random.permutation(n)
         # flag to be used
         moved = False
-        curr_cost = dist(sigma)
 
         for i in order:
             b = bestMove(i)
@@ -75,10 +118,10 @@ def run(data, params, sigma=None):
             
 
         # if not a single candidate was moved, exit loop
-        if not moved or dist(sigma) == curr_cost:
+        if not moved:
             break
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
-    return ALGORITHM_NAME, dist(sigma), time_elapsed, sigma
+    return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed, sigma
     

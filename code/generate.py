@@ -28,16 +28,20 @@ class MallowsSample:
             Returns
             -------
             list
-                The top-lists generated
+                The top-lists generated, where each top-list is a tuple
         """
-        # One is added to the label of each candidate for consistency with 
-        # datsets from PrefLib, which never have a candidate named zero, 
-        # unlike the data genereted from mallows_kendall.py
-        # Since this relabels the names of candidates without changing their 
-        # relative rankings, this does not affect results
+        # mallows_kandall.py generates top-lists in dictionary format 
+        # (see 'Intro to top k ranks and MM.ipynb')
+        #
+        # This converts top-lists to a format in which 
+        # (0,1,2) indicates that candidate 0 precedes 
+        # canddiates 1 and 2, candidate 1 precedes candidate 2, etc.
         allLists = list()
         for k, freq in k_distribution.items():
             for ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0, seed):
+                # -1 is an invalid candidate label, so 
+                # if -1s exist in our data, this is clearly 
+                # an error / bug
                 formattedRanking = [-1 for i in range(k)]
                 for candidate in range(len(ranking)):
                     if not np.isnan(ranking[candidate]):

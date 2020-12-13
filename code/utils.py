@@ -153,7 +153,7 @@ def precedenceMatrix(data, n):
                 candidateTwo = topList[j]
                 q[candidateOne,candidateTwo] += data[topList]
 
-        # Every candidate in ranking x are now in
+        # Every candidate in ranking x is now in
         # candidatesFromList. These candidates 
         # precede all unranked candidates, and 
         # the unranked candidates precede 
@@ -164,6 +164,7 @@ def precedenceMatrix(data, n):
                 q[rankedCandidate, unrankedCandidate] += data[topList]
 
     return q
+
 
 
 def alternativeRankFrequency(data, n):
