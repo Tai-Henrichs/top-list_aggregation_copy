@@ -72,9 +72,12 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     n = params['n']
     
     # Handle default arguments
-    if permBound is None or permBound > n or baseList is None:
-        permBound = n
+    if baseList is None:
+        baseList = tuple(i for i in range(n))
 
+    if permBound is None or permBound > n:
+        permBound = n
+    
     # Spaces are not supported by Pulp, use '_' 
     # to separate names instead
     # Otherwise, Pulp will generate warnings
@@ -82,7 +85,7 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
 
     model = plp.LpProblem(f"Kemeny{separator}Integer{separator}Program")
 
-    indices = tuple(i for i in range(permBound))
+    indices = baseList[:permBound]
     indexPermutations = tuple(pair for pair in itertools.permutations(indices, r=2))
     indexCombinations = tuple(pair for pair in itertools.combinations(indices, r=2))
     
@@ -160,29 +163,49 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     for var in model.variables():
         # Process the string name of variable
         name = var.name
-        i = int(name.split(separator)[0])
+        candidateLabels = name.split(separator)
+        i = int(candidateLabels[0])
+
+        value = var.varValue
 
         # Update precedence frequency if i precedes a candidate j
-        # >= .5 handles the case that a linear-programming 
-        # relaxation was utilized
-        if var.varValue >= .5:
+        #
+        # Comparisons handle the case that linear programming was used
+        if value >= .5:
             precedenceFreqency[i] += 1
 
-    # -1 to make it evident that something is broken
-    # if the final output still contains a -1, since 
-    # that is an invalid candidate label
-    sigma = [-1 for i in indices]
-    for candidate, frequency in precedenceFreqency.items():
-        # In the final list, candidate must precede 
-        # frequency candidates. One is subtracted since 
-        # candidates do not precede themselves
-        # 
-        # For example, with 10 candidates,
-        # the candidate that precedes everyone would precede 
-        # 9 candidates since they don't precede themselves. 
-        index = len(sigma) - frequency - 1
-        sigma[index] = candidate
-    
+    # save for reuse
+    precedenceFreqencyIter = precedenceFreqency.items()
+
+    sigma = [candidate for candidate, _ in precedenceFreqencyIter]
+    if lpRelaxation:
+        # If linear programming is used, 
+        # we may have x_{i}_{j} = x_{j}_{i} = .5, 
+        # causing precedenceFrequency[i] to equal 
+        # precedenceFrequency[j]
+        # Could address this with additional constraints,
+        # but breaking ties in precedenceFrequency 
+        # lexicographically is generally more efficient
+        sigma.sort(key=lambda num : precedenceFreqency[num], reverse=True)
+    else:
+        for candidate, frequency in precedenceFreqencyIter:
+            # In the final list, candidate must precede 
+            # frequency candidates. One is subtracted since 
+            # candidates do not precede themselves
+            # 
+            # For example, with 10 candidates,
+            # the candidate that precedes everyone would precede 
+            # 9 candidates since they don't precede themselves. 
+            #
+            # This only works because precedenceFrequency[i]
+            # will never equal precedenceFrequency[j] for 
+            # any i and j, which is why this solution is only 
+            # used if integer-programming is used. Note that 
+            # this is faster than the sorting solution used 
+            # for linear-programming - O(n) vs. O
+            index = len(sigma) - frequency - 1
+            sigma[index] = candidate
+
     # Append the fixed portion of baseList onto 
     # the optimal sigma, assuming some items of 
     # the baseList are fixed

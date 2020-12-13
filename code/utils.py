@@ -57,7 +57,8 @@ def generalizedKendallTauDistance(data, sigma, n, N, s0=None):
     # sum_{i=1}^N K(sigma, tau_i) / N
     cost = 0
     for x in data:
-        cost += kendall_tau(np.array(sigma), piToTau(x, sigma)) * data[x]
+        pi = piToTau(x, sigma)
+        cost += kendall_tau(np.array(sigma), pi) * data[x]
     return cost / N
 
 
@@ -70,7 +71,7 @@ def kendall_tau(rank_a,rank_b):
     """
     tau = 0
     n_candidates = len(rank_a)
-
+    
     aPos = dict()
     bPos = dict()
     for i in range(n_candidates):
@@ -101,7 +102,6 @@ def piToTau(pi, sigma):
     Returns
         a (n,) np array, tau.
     """
-
     # set of the current top-list. Makes for fast containment queries
     pi_set = set(pi)
 

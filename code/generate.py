@@ -35,9 +35,17 @@ class MallowsSample:
         # unlike the data genereted from mallows_kendall.py
         # Since this relabels the names of candidates without changing their 
         # relative rankings, this does not affect results
-        return [tuple(ranking[~np.isnan(ranking)].astype(int))  
-                for k, freq in k_distribution.items()  
-                    for ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0, seed)]
+        allLists = list()
+        for k, freq in k_distribution.items():
+            for ranking in mk.sampling_top_k_rankings(freq, n, k, theta, phi, s0, seed):
+                formattedRanking = [-1 for i in range(k)]
+                for candidate in range(len(ranking)):
+                    if not np.isnan(ranking[candidate]):
+                        position = int(ranking[candidate])
+                        formattedRanking[position] = candidate
+                allLists.append(tuple(formattedRanking))
+
+        return allLists
 
     """This class represents a single sample generated from a
     Mallows Models adapted to top-k rankings given a parameter of dispersion
@@ -64,7 +72,7 @@ class MallowsSample:
     def __init__(self,n,k_distribution,theta=None,phi=None,s0=None,seed=None):
         self.n = n
         self.theta, self.phi = mk.check_theta_phi(theta, phi)
-        self.s0 = np.array(range(n)) + 1 if s0 is None else s0
+        self.s0 = np.array(range(n)) if s0 is None else s0
         self.sample = self.topListSample(n,k_distribution,theta,phi,s0,seed)
         self.m = len(self.sample)
         self.sample = Counter(self.sample)
@@ -205,7 +213,7 @@ if __name__ == '__main__':
     # General Sample parameters
     m = 10
     n = 10
-    thetas = (.001, .1)
+    thetas = (.001, .1, 100)
 
     k = 5
     lda = 2

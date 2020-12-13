@@ -72,7 +72,9 @@ def scoreThenAdjustBase(data, params, epsilon, relax):
     if permBound >= 1:
         # Consider all possible permutations of the sorted list of candidates, 
         # only allowing the first permBound candidates to be shifted in their locations
-        # Select the permutation that minimizes kendall-tau distance
+        # Select the permutation that minimizes kendall-tau distance, using 
+        # a linear programming relaxation if relax is True and using an exect 
+        # MIP otherwise
         sigma = ip.solve(data, params, baseList=sigma, permBound=permBound, lpRelaxation=relax)
 
     return sigma
