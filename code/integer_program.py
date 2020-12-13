@@ -89,7 +89,12 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     # Overview: First, compute the top-permBound-list that has the minimum average kendall-Tau 
     # distance to the top-lists in data using integer-programming. Second, append the 
     # unpermutable portion of baseList onto the end of the top-permBound-list from step one.
-    precedenceMatrix = utils.precedenceMatrix(data, len(indices))
+    
+    # precedenceMatrix still n by n because, otherwise, 
+    # there can be out-of-bound errors when constructing 
+    # precedenceMatrix, and a candidate with a numeric 
+    # label >= permBound is considered.
+    precedenceMatrix = utils.precedenceMatrix(data, n)
 
     # x_{i,j} is a binary variable since the full-ranking either places 
     # candidate i before candidate j, or it does not
