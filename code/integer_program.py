@@ -155,7 +155,7 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     model.setObjective(kendall_dist)
 
     # msg = 0 suppresses log information
-    model.solve(plp.PULP_CBC_CMD(msg=0))
+    model.solve(plp.PULP_CBC_CMD(msg=False))
 
     # Dictionary to track how many candidates a given candidate precedes
     precedenceFreqency = {i:0 for i in indices}
@@ -174,37 +174,8 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
         if value >= .5:
             precedenceFreqency[i] += 1
 
-    # save for reuse
-    precedenceFreqencyIter = precedenceFreqency.items()
-
-    sigma = [candidate for candidate, _ in precedenceFreqencyIter]
-    if lpRelaxation:
-        # If linear programming is used, 
-        # we may have x_{i}_{j} = x_{j}_{i} = .5, 
-        # causing precedenceFrequency[i] to equal 
-        # precedenceFrequency[j]
-        # Could address this with additional constraints,
-        # but breaking ties in precedenceFrequency 
-        # lexicographically is generally more efficient
-        sigma.sort(key=lambda num : precedenceFreqency[num], reverse=True)
-    else:
-        for candidate, frequency in precedenceFreqencyIter:
-            # In the final list, candidate must precede 
-            # frequency candidates. One is subtracted since 
-            # candidates do not precede themselves
-            # 
-            # For example, with 10 candidates,
-            # the candidate that precedes everyone would precede 
-            # 9 candidates since they don't precede themselves. 
-            #
-            # This only works because precedenceFrequency[i]
-            # will never equal precedenceFrequency[j] for 
-            # any i and j, which is why this solution is only 
-            # used if integer-programming is used. Note that 
-            # this is faster than the sorting solution used 
-            # for linear-programming - O(n) vs. O
-            index = len(sigma) - frequency - 1
-            sigma[index] = candidate
+    sigma = [candidate for candidate, _ in precedenceFreqency.items()]
+    sigma.sort(key=lambda num : precedenceFreqency[num], reverse=True)
 
     # Append the fixed portion of baseList onto 
     # the optimal sigma, assuming some items of 
