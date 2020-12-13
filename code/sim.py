@@ -1,7 +1,8 @@
 import sys
 import ast
-import footrule, borda, scoreborda, random_sort, score_then_adjust
+import footrule, borda, scoreborda, random_sort, score_then_adjust, copeland
 import optimal, localsearch, relaxed_linear_program, score_then_adjust_relaxed
+
 
 from collections import Counter
 from generate import MallowsSamplePoisson, MallowsSampleTopK
@@ -102,6 +103,7 @@ class Simulation:
                 "Local-Search": localsearch.run,
                 "Relaxed-Linear-Program" : relaxed_linear_program.run,
                 "Score-Then-Adjust-Relaxed" : score_then_adjust_relaxed.run,
+                "Copeland" : copeland.run,
                 "Optimal" : optimal.run
                 }
 

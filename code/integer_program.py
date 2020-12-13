@@ -154,13 +154,6 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     # msg = 0 suppresses log information
     model.solve(plp.PULP_CBC_CMD(msg=0))
 
-    
-    # If linear-programming relaxation, 
-    # need to round all variables to the 
-    # nearest integer
-    if lpRelaxation:
-        model.roundSolution()
-
     # Dictionary to track how many candidates a given candidate precedes
     precedenceFreqency = {i:0 for i in indices}
 
@@ -170,7 +163,9 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
         i = int(name.split(separator)[0])
 
         # Update precedence frequency if i precedes a candidate j
-        if var.varValue == 1:
+        # >= .5 handles the case that a linear-programming 
+        # relaxation was utilized
+        if var.varValue >= .5:
             precedenceFreqency[i] += 1
 
     # -1 to make it evident that something is broken
