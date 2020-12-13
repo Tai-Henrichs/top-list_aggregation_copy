@@ -62,9 +62,8 @@ def scoreThenAdjustBase(data, params, epsilon, relax):
     N = params['N']
 
     # Order candidates by non-increasing scores (descending order with lexicographic tie-breaking)
-    candidateScores = utils.scores(data,n,N)
     sigma = [i for i in range(n)]
-    sigma.sort(key=lambda i : candidateScores[i], reverse=True)
+    sigma.sort(key=lambda i : utils.scores(data,n,N)[i], reverse=True)
 
     permBound = (1 + (1.0 / epsilon)) * (params['k'] - 1)
     permBound = math.ceil(permBound)

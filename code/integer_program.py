@@ -209,7 +209,7 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     # Append the fixed portion of baseList onto 
     # the optimal sigma, assuming some items of 
     # the baseList are fixed
-    if permBound < n and baseList is not None:
+    if permBound < n:
         fixedElements = baseList[permBound:]
         sigma.extend(fixedElements)
 
