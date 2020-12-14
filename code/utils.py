@@ -118,7 +118,7 @@ def piToTau(pi, sigma):
 def precedenceMatrix(data, n):
     """
     This functions computes the n by n precedence matrix 'q', where q[i,j] is the 
-    percentage of the top-lists for which candidate i is ranked before candidate j.
+    number of top-lists for which candidate i is ranked before candidate j.
     Note that if candidate i precedes candidate j in some ranking, that means 
     i is preferred to j for the ranking.
     --------------------------------------
