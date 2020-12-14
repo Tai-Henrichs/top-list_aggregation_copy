@@ -167,6 +167,62 @@ def precedenceMatrix(data, n):
 
 
 
+def disagreements(fullRanking, oldPosition, newPosition, precedenceMatrix):
+    """
+    Let R be the ranking that results from  placing 
+    the candidate at oldPosition in fullRanking at 
+    newPosition, still within fullRanking. 
+    Return the number of pairwise disagreements 
+    between R and top-lists in data
+    concerning the rank of 'candidate'. 
+    --------------------------------------
+
+    Params
+
+    'fullRanking': list or tuple of ints
+            A ranking of all candidates.
+
+    'oldPosition': int
+            Index into fullRanking 
+            that stores the candidate being 
+            swapped.
+
+    'newPosition': int
+            Index where the candidate 
+            fullRanking[oldPosition]
+            is to be moved for 
+            computing pairwise disagreements.
+    ---------------------------------------
+
+    Returns int
+    """
+
+    disagreements = 0
+    candidate = fullRanking[oldPosition]
+
+    # Count top-lists that place candidates 
+    # preceeding candidate in the given 
+    # partialRanking after candidate
+    for i in range(newPosition):
+        otherCandidate = fullRanking[i]
+        # otherCandidate may equal candidate (if newPosition > oldPosition), 
+        # but then precedenceMatrix[candidate,otherCandidate] will be 0
+        disagreements += precedenceMatrix[candidate,otherCandidate]
+
+    # Count top-lists that place candidates 
+    # ranked after candidate in the given 
+    # partialRanking before candidate
+    for i in range(newPosition, len(fullRanking)):
+        otherCandidate = fullRanking[i]
+        # otherCandidate may equal candidate (if newPosition < oldPosition), 
+        # but then precedenceMatrix[candidate,otherCandidate] will be 0
+        disagreements += precedenceMatrix[otherCandidate,candidate]
+
+    return disagreements
+
+
+
+
 def alternativeRankFrequency(data, n):
     """
     This functions computes an n by n matrix 'p' where p[i,j] is the number of
@@ -212,6 +268,7 @@ def alternativeRankFrequency(data, n):
 
 
 
+
 def scores(data, n, N):
     """
     Computes the probability that a candidate is ranked
@@ -225,6 +282,7 @@ def scores(data, n, N):
         A (n,) numpy array corresponding to the score of each candidate
     """
     return np.sum(alternativeRankFrequency(data,n), axis=1) / N
+
 
 
 
@@ -245,6 +303,7 @@ def unrankedAlternatives(data, n, N):
     """
     off_by_one =  np.where(np.isclose(scores(data,n,N), 0))[0].tolist()
     return tuple(off_by_one)
+
 
 
 
@@ -283,9 +342,11 @@ def avgRanks(data, n, N):
         
     return ranks
 
+
+
+
 def lineGenerator(length):
     line = ""
     for i in range(length):
         line += "-"
     return line
-
