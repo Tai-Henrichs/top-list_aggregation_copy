@@ -2,9 +2,9 @@ import utils
 import time
 import numpy as np
 
-AGLORITHM_NAME = "Chanas"
+ALGORITHM_NAME = "Chanas"
 
-def run(data, params, sigma):
+def run(data, params, sigma=None):
     """
     Implements the Chanas Algorithm
     """
@@ -25,10 +25,10 @@ def run(data, params, sigma):
 
     def sort(s):
         for i in range(len(s)):
-            old_cost = utils.disagreements(s,i,i,p_matrix) + utils.disagreements(s,j,j,p_matrix)
             for j in range(i):
+                old_cost = utils.disagreements(s,i,i,p_matrix) + utils.disagreements(s,j,j,p_matrix)
                 curr_cost = utils.disagreements(s,i,j,p_matrix) + utils.disagreements(s,j,i,p_matrix)
-                if  < old_cost:
+                if curr_cost < old_cost:
                     # swap candidates and move on to next i
                     s[i], s[j] = s[j], s[i]
                     break
@@ -42,6 +42,6 @@ def run(data, params, sigma):
     # second pass
     sigma = tuple(sort(sigma))
                 
-    time_elapsed = (time.process_time() - start_time()) * 1000
+    time_elapsed = (time.process_time() - start_time) * 1000
 
     return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed, sigma
