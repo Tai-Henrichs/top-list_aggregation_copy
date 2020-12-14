@@ -2,7 +2,7 @@ import time
 import integer_program as ip
 import utils
 
-ALGORITHM_NAME = "OPTIMAL_SOLUTION"
+ALGORITHM_NAME = "OPTIMAL"
 
 def run(data, params):
     """
