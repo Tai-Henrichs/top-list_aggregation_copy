@@ -20,7 +20,7 @@ def run(data, params, sigma=None):
 
     # if sigma is not given by previous algorithm, 
     # make it a random starting permutation
-    if sigma == None:
+    if sigma is None:
         sigma = np.random.permutation(n)
 
     precedenceMatrix = utils.precedenceMatrix(data,n)

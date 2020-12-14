@@ -18,8 +18,10 @@ def run(data, params, sigma=None):
 
     # if sigma is not given by previous algorithm, 
     # make it a random starting permutation
-    if sigma == None:
+    if sigma is None:
         sigma = np.random.permutation(n)
+    else:
+        sigma = np.array(sigma)
 
     p_matrix = utils.precedenceMatrix(data,n)
 

@@ -60,7 +60,7 @@ The different choices that we provide are:
 
     -------------------------------
 
-Usage: python3 sim.py [algo1,algo2,...] [s <OR> r]  [<if s> n,N,theta,k] [<if s> s0] [<if r>: path/to/file.CSV] [c <OR> n] seed 
+Usage: python3 sim.py [algo1,algo2,...] [s <OR> r] [<if s> n,N,theta,k] [<if s> s0] [<if r>: path/to/file.CSV] [c <OR> nc] seed 
 
 Examples:
 
