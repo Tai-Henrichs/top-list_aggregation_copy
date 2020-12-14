@@ -60,7 +60,7 @@ The different choices that we provide are:
 
     -------------------------------
 
-Usage: python3 sim.py [algo1,algo2,...] [s <OR> r]  [<if s> n,N,theta,k]  [<if s> s0]  [<if r>: path/to/file.CSV] seed
+Usage: python3 sim.py [algo1,algo2,...] [s <OR> r]  [<if s> n,N,theta,k] [<if s> s0] [<if r>: path/to/file.CSV] [c <OR> n] seed 
 
 Examples:
 
@@ -129,6 +129,7 @@ class Simulation:
 
         self.epsilons = list()
 
+        self.combinations = None
 
 
     def __str__(self):
@@ -245,6 +246,15 @@ class Simulation:
 
         """
 
+        def postProcess(data, params, preProcessAlgo, baseList):
+            postProcessAlgos = {"Chanas", "Local-Search"}
+
+            for postProcessAlgo in postProcessAlgos:
+                if not postProcessAlgo == preProcessAlgo:
+                    _ , averageKendallTauDist, time, _ = self.funcDict[postProcessAlgo](data, params, baseList)
+                    name = f"{preProcessAlgo}_{postProcessAlgo}"
+                    self.results.append((name, averageKendallTauDist, time))
+
         for func in algorithms:
             if func not in self.funcDict:
                 print(f'incorrect function name! {func} was not found')
@@ -254,17 +264,21 @@ class Simulation:
             if func == "Score-Then-Adjust" or func == "Score-Then-Adjust-Relaxed":
                 for epsilon in self.epsilons:
                     #passes Counter object dataset as well as data specs
-                    name, averageKendallTauDist, time, _ = alg(self.data, self.params, epsilon)
+                    name, averageKendallTauDist, time, sigma  = alg(self.data, self.params, epsilon)
                     self.results.append((name, averageKendallTauDist, time))
+
+                    if self.combinations == 'c':
+                        postProcess(self.data, self.params, func, sigma)
+
             # ordinary case
             else:
-                name, averageKendallTauDist, time, _ = alg(self.data, self.params)
+                name, averageKendallTauDist, time, sigma = alg(self.data, self.params)
                 self.results.append((name, averageKendallTauDist, time))
+
+                if self.combinations == 'c' and not func == 'Optimal':
+                        postProcess(self.data, self.params, func, sigma)
             
             
-
-
-
     def parseListArg(self, s):
         """
         This is a helper for main that serves to process list-like command line args
@@ -318,10 +332,12 @@ class Simulation:
             self.params['label'] +=  args[2].split("/")[-1]
             self.data = self.parseCSV(args[2])
 
-            # Set seed if provided
-            if arglen == 3:
-                self.params['seed'] = int(args[2])
+            self.combinations = args[3]
 
+            # Set seed if provided
+            mandatoryRealArgs = 4
+            if arglen == mandatoryRealArgs + 1:
+                self.params['seed'] = int(args[mandatoryRealArgs])
 
         # if synthetic dataset
         elif args[1] == "s":
@@ -341,28 +357,30 @@ class Simulation:
 
             # Handle optional arguments
 
+            # Number of mandatory arguments 
+            # when considering synthetic data
+            mandatoryArgs = 4
+
             # One optional argument
-            if arglen == 4:
+            if arglen == mandatoryArgs + 1:
                 # The one optional argument is a seed
-                if args[3].isdigit():
-                    self.params['seed'] = int(args[3])
+                if args[mandatoryArgs].isdigit():
+                    self.params['seed'] = int(args[mandatoryArgs])
+                    self.combinations = args[mandatoryArgs-1]
+
                 # The one optional argument is a ground list
-                elif type(ast.literal_eval(args[3])) is list:
-                    self.params['s0'] = self.parseListArg(args[3])
+                elif type(ast.literal_eval(args[mandatoryArgs-1])) is list:
+                    self.params['s0'] = self.parseListArg(args[mandatoryArgs-1])
+                    self.combinations = args[mandatoryArgs]
+
                 # Error!
                 else:
                     print("Optional arguments for simulated data must be either seed (int) or s0 (list)")
             # Two optional arguments
-            elif arglen == 5:
-                if args[3].isdigit():
-                    self.params['s0'] = self.parseListArg(args[3])
-                else:
-                    print("You have given two optional arguments. The fourth argument should be s0, which is of type list!")
-
-                if type(ast.literal_eval(args[4])) is list:
-                    self.params['s0'] = self.parseListArg(args[4])
-                else:
-                    print("You have given two optional arguments. The fifth argument should be seed, which is of type int!")
+            elif arglen == mandatoryArgs + 2:
+                self.params['seed'] = int(args[mandatoryArgs + 1])
+                self.combinations = args[mandatoryArgs]
+                self.params['s0'] =  self.parseListArg(args[mandatoryArgs-1])
 
             # generate data
             self.data = self.genMallows(self.params)
@@ -374,7 +392,7 @@ class Simulation:
         else:
             print("wrong usage! second argument should be 'r' or 's'")
             return
-
+            
         # run all functions
         self.handleFunc(algs)
 
@@ -383,7 +401,8 @@ class Simulation:
 
 
 if __name__ == '__main__':
-    if not (3 <= len(sys.argv) <=  5):
+    if not (3 <= len(sys.argv) <=  6):
+        print(f"Too many arguments! Expected 3 to 6 arguments, got {len(sys.argv)}. See usage:")
         print("python3 sim.py [algo1,algo2,...] [s <OR> r]  [<if s> n,N,theta,k]  [<if s> s0]  [<if r>: path/to/file.CSV] seed")
     else:
         sim = Simulation()
