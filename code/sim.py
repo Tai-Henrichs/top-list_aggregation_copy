@@ -1,10 +1,12 @@
 import sys
+import os.path
 import ast
 import footrule, borda, scoreborda, random_sort, score_then_adjust, copeland
 import optimal, localsearch, relaxed_linear_program, score_then_adjust_relaxed
 import quick_sort_random, insertion_sort, quick_sort_det
 
 
+from os import path
 from collections import Counter
 from generate import MallowsSamplePoisson, MallowsSampleTopK
 
@@ -139,7 +141,7 @@ class Simulation:
 
         out += "\nEXPERIMENTS:\n"
         for alg, acc, time in self.results:
-            out += f'{alg} ran in {time:.{precision}f} cpu seconds with a score of {acc:.{precision}f}\n'
+            out += f'{alg} ran in {time:.{precision}f} cpu seconds with a distance of {acc:.{precision}f}\n'
         
         return out
 
@@ -152,14 +154,19 @@ class Simulation:
         '<distance>, <time>' as a line.
 
         """
-        for c in self.results:
-            fname = f'{self.params["label"]}'
-            f = open(fname, "a") 
-            f.write(f'{c[0]}, {c[1]}, {c[2]}\n') 
-            f.close()
 
-        # TODO: might wanna modify this at some point for different datasets with 
-        # different values of k and s0. Should not matter much for now
+        fname = f'{self.params["label"]}'
+
+        # adding header if newFile
+        if not path.exists(fname):
+            f = open(fname, "a")
+            f.write(f'ALGORITHM, DISTANCE, TIME\n')
+        else:
+            f = open(fname, "a") 
+
+        for c in self.results:
+            f.write(f'{c[0]}, {c[1]}, {c[2]:.5f}\n') 
+        f.close()
 
 
     def genMallows(self, params):
@@ -243,7 +250,7 @@ class Simulation:
             alg = self.funcDict[func]
 
             # special case where we are running top-k, must run for all epsilons
-            if func == "Score-Then-Adjust":
+            if func == "Score-Then-Adjust" or func == "Score-Then-Adjust-Relaxed":
                 for epsilon in self.epsilons:
                     #passes Counter object dataset as well as data specs
                     name, averageKendallTauDist, time, _ = alg(self.data, self.params, epsilon)
@@ -270,7 +277,7 @@ class Simulation:
 
         #parse strings to numbers if necessary
         if l[0].isnumeric():
-            return [int(i) if float(i).is_integer() else float(i) for i in l]
+            return [int(float(i)) if float(i).is_integer() else float(i) for i in l]
 
         #else leave as list of (str) case: parsing algorithms list
         return l
@@ -360,7 +367,8 @@ class Simulation:
             self.data = self.genMallows(self.params)
 
             # setting label according to Mallows distribution, n, N, and theta
-            self.params['label'] += f'mallows_n{self.params["n"]}_N{self.params["N"]}_th{self.params["theta"]}.csv'
+            distrb = 'poisson' if self.params['mallows_topk'] == False else 'topk'
+            self.params['label'] += f'mallows_{distrb}_n{self.params["n"]}_N{self.params["N"]}_th{self.params["theta"]}_k{self.params["k"]}.csv'
 
         else:
             print("wrong usage! second argument should be 'r' or 's'")
