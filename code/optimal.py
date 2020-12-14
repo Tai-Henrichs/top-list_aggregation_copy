@@ -49,7 +49,7 @@ def run(data, params):
     # (distribution is drawn off this full ranking)
     s0 = params['s0']
 
-    sigma = ip.solve(data, params)
+    sigma = ip.solve(data, params, lpRelaxation=False)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 

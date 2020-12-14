@@ -87,6 +87,7 @@ def kendall_tau(rank_a,rank_b):
 
     return tau
 
+
 def piToTau(pi, sigma):
     """
     Helper function that converts top-lists pi_i to tau_i full lists
@@ -115,10 +116,11 @@ def piToTau(pi, sigma):
     return np.array(list(pi) + extension)
 
 
+
 def precedenceMatrix(data, n):
     """
     This functions computes the n by n precedence matrix 'q', where q[i,j] is the 
-    percentage of the top-lists for which candidate i is ranked before candidate j.
+    number of top-lists for which candidate i is ranked before candidate j.
     Note that if candidate i precedes candidate j in some ranking, that means 
     i is preferred to j for the ranking.
     --------------------------------------
@@ -219,7 +221,6 @@ def disagreements(fullRanking, oldPosition, newPosition, precedenceMatrix):
         disagreements += precedenceMatrix[otherCandidate,candidate]
 
     return disagreements
-
 
 
 

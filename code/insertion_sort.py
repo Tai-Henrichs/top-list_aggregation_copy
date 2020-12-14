@@ -1,13 +1,14 @@
-import utils 
 import time
+import utils
 
-ALGORITHM_NAME = "Copeland"
+ALGORITHM_NAME = "IS"
 
 def run(data, params):
     """
-    This method implements Copeland's voting rule, which 
-    orders candidates from most to least pairwise contest 
-    wins. 
+    This method implements insertion sort. 
+    During sorting, candidate a > candidate b iff 
+    a precedes b more often than the reverse
+    in the top-lists provided in data.
     -------------------------------------
 
     Params
@@ -52,21 +53,26 @@ def run(data, params):
     # (ascending order with lexicographic tie-breaking)
     precedenceMatrix = utils.precedenceMatrix(data, n)
 
-    def totalPairwiseVictories(i):
-        totalVictories = 0
-        for j in range(n):
-            # If candidates i and j beat each 
-            # other an equal number of times, i and j 
-            # each have a victory
-            if precedenceMatrix[i,j] >= precedenceMatrix[j,i]:
-                totalVictories += 1
-        return totalVictories
+    # Credits to Sayan-Paul for starter code for insertion sort
+    # See: https://github.com/Sayan-Paul/Sort-Library-in-Python/blob/master/sortlib.py
+    def insertion(ar):
+        for i in range(len(ar)):
+            j=i-1
+            ch=i
+            while j>=0:
+                if precedenceMatrix[ar[ch],ar[j]] < precedenceMatrix[ar[j],ar[ch]]:
+                    ar[ch],ar[j]=ar[j],ar[ch]
+                    ch=j
+                j-=1
+        return ar
 
     candidates = [i for i in range(n)]
-    candidates.sort(key=totalPairwiseVictories, reverse=False)
+    sortedCandidates = insertion(candidates)
 
-    sigma = tuple(candidates)
+    sigma = tuple(sortedCandidates)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
     return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed, sigma
+
+    
