@@ -1,0 +1,9 @@
+ALGORITHM, DISTANCE, TIME
+FootRule+, 43.6025, 14.62552
+Borda+, 43.6395, 27.60804
+Score-Then-Borda+, 43.6395, 41.36989
+RandomSort, 45.8225, 69.31811
+Local-Search, 43.321, 121.84856
+Linear-Programming-Relaxation, 43.321, 173.32011
+Copeland, 47.5445, 112.07894
+OPTIMAL, 43.321, 182.45379
