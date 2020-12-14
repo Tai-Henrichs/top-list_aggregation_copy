@@ -2,7 +2,8 @@ import sys
 import os.path
 import ast
 import footrule, borda, scoreborda, random_sort, score_then_adjust, copeland
-import optimal, localsearch, relaxed_linear_program, score_then_adjust_relaxed
+import optimal, localsearch, chanas, relaxed_linear_program, score_then_adjust_relaxed
+import quick_sort_random, insertion_sort, quick_sort_det
 
 
 from os import path
@@ -106,6 +107,10 @@ class Simulation:
                 "Relaxed-Linear-Program" : relaxed_linear_program.run,
                 "Score-Then-Adjust-Relaxed" : score_then_adjust_relaxed.run,
                 "Copeland" : copeland.run,
+                "Chanas": chanas.run,
+                "Quick-Sort-Rand" : quick_sort_random.run,
+                "Quick-Sort-Det" : quick_sort_det.run,
+                "Insertion-Sort" : insertion_sort.run,
                 "Optimal" : optimal.run
                 }
 

@@ -83,7 +83,8 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     # Otherwise, Pulp will generate warnings
     separator = "_"
 
-    model = plp.LpProblem(f"Kemeny{separator}Integer{separator}Program")
+    programType = "Linear" if lpRelaxation else "Integer"
+    model = plp.LpProblem(f"Kemeny{separator}{programType}{separator}Program")
 
     indices = baseList[:permBound]
     indexPermutations = tuple(pair for pair in itertools.permutations(indices, r=2))
@@ -154,7 +155,7 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     model.sense = plp.LpMinimize
     model.setObjective(kendall_dist)
 
-    # msg = 0 suppresses log information
+    # msg = False suppresses log information
     model.solve(plp.PULP_CBC_CMD(msg=False))
 
     # Dictionary to track how many candidates a given candidate precedes
@@ -174,6 +175,7 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
         if value >= .5:
             precedenceFreqency[i] += 1
 
+    # Sort candidates starting with those that precede the most candidates
     sigma = [candidate for candidate, _ in precedenceFreqency.items()]
     sigma.sort(key=lambda num : precedenceFreqency[num], reverse=True)
 

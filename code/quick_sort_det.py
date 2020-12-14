@@ -1,13 +1,25 @@
-import utils 
 import time
+import utils
+import quick_sort_base as qsb
 
-ALGORITHM_NAME = "Copeland"
+ALGORITHM_NAME = "QS DET"
 
 def run(data, params):
     """
-    This method implements Copeland's voting rule, which 
-    orders candidates from most to least pairwise contest 
-    wins. 
+    This method implements a quick-sort 
+    algorithm that uses a deterministic 
+    pivot-selection. In particular, 
+    each candidate in a list is considered 
+    as a pivot, and the chosen pivot 
+    is the candidate with the 
+    fewest pair-wise disagreements respecting 
+    candidates preceeding and following the 
+    the list being divided by the pivot.
+    
+    During sorting, 
+    candidate a > candidate b iff 
+    a precedes b more often than the reverse
+    in the top-lists provided in data.
     -------------------------------------
 
     Params
@@ -48,25 +60,41 @@ def run(data, params):
     # (distribution is drawn off this full ranking)
     s0 = params['s0']
 
-    # Order candidates by non-decreasing pair-wise contest wins 
-    # (ascending order with lexicographic tie-breaking)
     precedenceMatrix = utils.precedenceMatrix(data, n)
 
-    def totalPairwiseVictories(i):
-        totalVictories = 0
-        for j in range(n):
-            # If candidates i and j beat each 
-            # other an equal number of times, i and j 
-            # each have a victory
-            if precedenceMatrix[i,j] >= precedenceMatrix[j,i]:
-                totalVictories += 1
-        return totalVictories
+    def pivotCost(arr, start, end, pivot):
+        cost = 0
+        candidate = arr[pivot]
+
+        for i in range(start, pivot):
+            otherCandidate = arr[i]
+            cost += precedenceMatrix[candidate, otherCandidate]
+
+        for i in range(pivot, end+1):
+            otherCandidate = arr[i]
+            cost += precedenceMatrix[otherCandidate, candidate]
+
+        return cost
+
+    def bestPrecedence(arr, start, end):
+        bestPivotSoFar = start
+        minPivotCost = pivotCost(arr, start, end, start)
+
+        for i in range(start+1,end+1):
+            currCost = pivotCost(arr, start, end, i)
+            if currCost < minPivotCost:
+                bestPivotSoFar = i 
+                minPivotCost = currCost
+
+        return bestPivotSoFar
 
     candidates = [i for i in range(n)]
-    candidates.sort(key=totalPairwiseVictories, reverse=False)
+    qsb.quicksort(precedenceMatrix, candidates, bestPrecedence)
 
     sigma = tuple(candidates)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 
     return ALGORITHM_NAME, utils.generalizedKendallTauDistance(data, sigma, n, N, s0), time_elapsed, sigma
+
+
