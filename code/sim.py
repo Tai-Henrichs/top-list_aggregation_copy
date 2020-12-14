@@ -137,7 +137,7 @@ class Simulation:
 
         out += "\nEXPERIMENTS:\n"
         for alg, acc, time in self.results:
-            out += f'{alg} ran in {time:.{precision}f} cpu seconds with a score of {acc:.{precision}f}\n'
+            out += f'{alg} ran in {time:.{precision}f} cpu seconds with a distance of {acc:.{precision}f}\n'
         
         return out
 
@@ -161,7 +161,7 @@ class Simulation:
             f = open(fname, "a") 
 
         for c in self.results:
-            f.write(f'{c[0]}, {c[1]}, {c[2]:.4f}\n') 
+            f.write(f'{c[0]}, {c[1]}, {c[2]:.5f}\n') 
         f.close()
 
 
