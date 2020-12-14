@@ -142,7 +142,11 @@ class Simulation:
             out += f'{key}: {val}\n'
 
         out += "\nEXPERIMENTS:\n"
-        for alg, acc, time in self.results:
+        for res in self.results:
+            if len(res) == 4:
+                alg, acc, time, __ = res
+            else:
+                alg, acc, time = res
             out += f'{alg} ran in {time:.{precision}f} cpu seconds with a distance of {acc:.{precision}f}\n'
         
         return out
@@ -167,7 +171,10 @@ class Simulation:
             f = open(fname, "a") 
 
         for c in self.results:
-            f.write(f'{c[0]}, {c[1]}, {c[2]:.5f}\n') 
+            f.write(f'{c[0]}, {c[1]}, {c[2]:.5f}') 
+            if len(c) == 4:
+                f.write(f', {c[3]:.3f}')
+            f.write('\n')
         f.close()
 
 
