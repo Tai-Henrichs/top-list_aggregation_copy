@@ -1,7 +1,7 @@
-import utils 
 import time
+import utils
 
-ALGORITHM_NAME = "Copeland"
+ALGORITHM_NAME = "Insertion Sort"
 
 def run(data, params):
     """
@@ -52,20 +52,41 @@ def run(data, params):
     # (ascending order with lexicographic tie-breaking)
     precedenceMatrix = utils.precedenceMatrix(data, n)
 
-    def totalPairwiseVictories(i):
-        totalVictories = 0
-        for j in range(n):
-            # If candidates i and j beat each 
-            # other an equal number of times, i and j 
-            # each have a victory
-            if precedenceMatrix[i,j] >= precedenceMatrix[j,i]:
-                totalVictories += 1
-        return totalVictories
+    # Credits to Sayan-Paul for starter code for merge sort
+    # See: https://github.com/Sayan-Paul/Sort-Library-in-Python/blob/master/sortlib.py
+    def mergesort(ar):
+        if len(ar)<=1:
+            return ar
+        middle=len(ar)/2
+        left =ar[:middle]
+        right=ar[middle:]
+        left=mergesort(left)
+        right=mergesort(right)
+        res=merge(left,right)
+        return res
+
+    def merge(left,right):
+        res=[]
+        while len(left)+len(right):
+            if len(left)*len(right):
+                if precedenceMatrix[left[0],right[0]]<=precedenceMatrix[right[0],left[0]]:
+                    res.append(left[0])
+                    left=left[1:]
+                else:
+                    res.append(right[0])
+                    right=right[1:]
+            elif len(left):
+                res.append(left[0])
+                left=left[1:]
+            elif len(right):
+                res.append(right[0])
+                right=right[1:]
+        return res
 
     candidates = [i for i in range(n)]
-    candidates.sort(key=totalPairwiseVictories, reverse=False)
+    sortedCandidates = mergesort(candidates)
 
-    sigma = tuple(candidates)
+    sigma = tuple(sortedCandidates)
 
     time_elapsed = (time.process_time() - start_time) * 1000
 

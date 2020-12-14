@@ -165,8 +165,6 @@ def precedenceMatrix(data, n):
 
     return q
 
-
-
 def alternativeRankFrequency(data, n):
     """
     This functions computes an n by n matrix 'p' where p[i,j] is the number of
