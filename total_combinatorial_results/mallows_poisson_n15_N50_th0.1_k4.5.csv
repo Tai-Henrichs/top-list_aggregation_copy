@@ -1,0 +1,13 @@
+ALGORITHM, DISTANCE, TIME
+FootRule+, 18.2, 1.56930
+Borda+, 19.0, 0.73186
+Score-Then-Borda+, 19.0, 1.46300
+RandomSort, 19.86, 2.41544
+Local-Search, 17.9, 19.97092
+Linear-Programming-Relaxation, 17.9, 81.76704
+Copeland, 38.78, 2.31908
+OPTIMAL, 17.9, 89.66775
+Chanas, 28.48, 5.55536
+QS RAND, 36.9, 2.09834
+QS DET, 32.02, 2.22550
+IS, 39.14, 2.16689
