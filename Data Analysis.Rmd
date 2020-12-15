@@ -1,0 +1,16 @@
+---
+title: "Top-List Rank Aggregation Data Analysis"
+author: "Ammar Eltigani and Tai Henrichs"
+date: "12/15/2020"
+output: html_document
+---
+
+```{echo=FALSE}
+library(tidyverse)
+library(reticulate)
+```
+
+```{echo=FALSE}
+plot(pressure)
+```
+

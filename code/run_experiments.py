@@ -41,19 +41,19 @@ HIGH = 3
 # We don't run optimal here as it has already been ran for the same datasets in the combinations above
 
 #n=15, N=200, th=0.1, k=n*0.3
-master += [f'python3 sim.py [Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [{ns[LOW]},{Ns[LOW]},{ths[HIGH-1]},{ks_ratio[LOW]*ns[LOW]:.0f}] c {SEED}'
+master += [f'python sim.py [Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [{ns[LOW]},{Ns[LOW]},{ths[HIGH-1]},{ks_ratio[LOW]*ns[LOW]:.0f}] c {SEED}'
             for ep in epsilons
             ]
 
 #n=45, N=2000, th=0.001, k=n*0.7
-master += [f'python3 sim.py [Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [{ns[HIGH]},{Ns[HIGH]},{ths[LOW-1]},{ks_ratio[HIGH]*ns[HIGH]:.0f}] c {SEED}'
+master += [f'python sim.py [Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [{ns[HIGH]},{Ns[HIGH]},{ths[LOW-1]},{ks_ratio[HIGH]*ns[HIGH]:.0f}] c {SEED}'
             for ep in epsilons
             ]
 
 #--------------------------------------
 
 
-# REAL WORLD DATA
+""" # REAL WORLD DATA
 
 # Total # real world datasets: 38, i.e. len(fnames) = 38
 
@@ -61,9 +61,9 @@ PATH = '../data/soi/'
 
 fnames = [f for f in listdir(PATH) if isfile(join(PATH, f))]
 
-master += [f'python3 sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,Quick-Sort-Rand,Quick-Sort-Det,Insertion-Sort,Opt] r {PATH}{fname} c {SEED}'
+master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,QS-Rand,QS-Det,IS,Opt] r {PATH}{fname} c {SEED}'
             for fname in fnames
-            ]
+            ] """
 
 #--------------------------------------
 
