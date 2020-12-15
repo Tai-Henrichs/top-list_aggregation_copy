@@ -29,26 +29,28 @@ master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxe
             for th in ths
             ]
 
-# Varying epsilon with two sets of other params, one low and one high
+# Varying epsilon with three sets of other params, one low, one medium, and one high 
 # by low we mean a smaller value for n, N, and k, and larger for th (smaller and high consensus dataset)
 # by high we mean a larger value for n, N, and k, and smaller for th (harder and low consensus dataset)
+# by medium we mean a dataset of average or mean difficulty between high and low
 
-# Total epsilon datasets = 18*2 = 36
+# Total epsilon datasets = 8*3 = 16
 
-LOW = 1 
-HIGH = 3 
-
-# We don't run optimal here as it has already been ran for the same datasets in the combinations above
-
-#n=15, N=200, th=0.1, k=n*0.3
-master += [f'python3 sim.py [Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [{ns[LOW]},{Ns[LOW]},{ths[HIGH-1]},{ks_ratio[LOW]*ns[LOW]:.0f}] c {SEED}'
+# n = 10, N = 50, th = 0.1, k = 2 
+master += [f'python3 sim.py [Opt,Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [10,50,0.1,2] c {SEED}'
             for ep in epsilons
             ]
 
-#n=45, N=2000, th=0.001, k=n*0.7
-master += [f'python3 sim.py [Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [{ns[HIGH]},{Ns[HIGH]},{ths[LOW-1]},{ks_ratio[HIGH]*ns[HIGH]:.0f}] c {SEED}'
+# n = 30, N = 500, th = 0.01, k = 15 
+master += [f'python3 sim.py [Opt,Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [30,500,0.01,15] c {SEED}'
             for ep in epsilons
             ]
+
+# n = 50, N = 5000, th = 0.001, k = 45 
+master += [f'python3 sim.py [Opt,Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [50,5000,0.001,45] c {SEED}'
+            for ep in epsilons
+            ]
+
 
 #--------------------------------------
 
