@@ -2,7 +2,7 @@ import time
 import integer_program as ip
 import utils
 
-ALGORITHM_NAME = "Linear-Programming-Relaxation"
+ALGORITHM_NAME = "Relaxed-Linear-Program"
 
 def run(data, params):
     """

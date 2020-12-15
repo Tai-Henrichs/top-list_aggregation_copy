@@ -2,7 +2,7 @@ import time
 import utils
 import quick_sort_base as qsb
 
-ALGORITHM_NAME = "QS DET"
+ALGORITHM_NAME = "QS-Det"
 
 def run(data, params):
     """

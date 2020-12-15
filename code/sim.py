@@ -108,10 +108,10 @@ class Simulation:
                 "Score-Then-Adjust-Relaxed" : score_then_adjust_relaxed.run,
                 "Copeland" : copeland.run,
                 "Chanas": chanas.run,
-                "Quick-Sort-Rand" : quick_sort_random.run,
-                "Quick-Sort-Det" : quick_sort_det.run,
-                "Insertion-Sort" : insertion_sort.run,
-                "Optimal" : optimal.run
+                "QS-Rand" : quick_sort_random.run,
+                "QS-Det" : quick_sort_det.run,
+                "IS" : insertion_sort.run,
+                "Opt" : optimal.run
                 }
 
         self.data = None
@@ -253,14 +253,14 @@ class Simulation:
 
         """
 
-        def postProcess(data, params, preProcessAlgo, baseList):
+        def postProcess(data, params, preProcessAlgo, baseList, preTime):
             postProcessAlgos = {"Chanas", "Local-Search"}
 
             for postProcessAlgo in postProcessAlgos:
                 if not postProcessAlgo == preProcessAlgo:
                     _ , averageKendallTauDist, time, _ = self.funcDict[postProcessAlgo](data, params, baseList)
                     name = f"{preProcessAlgo}_{postProcessAlgo}"
-                    self.results.append((name, averageKendallTauDist, time))
+                    self.results.append((name, averageKendallTauDist, preTime + time))
 
         for func in algorithms:
             if func not in self.funcDict:
@@ -275,15 +275,15 @@ class Simulation:
                     self.results.append((name, averageKendallTauDist, time))
 
                     if self.combinations == 'c':
-                        postProcess(self.data, self.params, func, sigma)
+                        postProcess(self.data, self.params, func, sigma, time)
 
             # ordinary case
             else:
                 name, averageKendallTauDist, time, sigma = alg(self.data, self.params)
                 self.results.append((name, averageKendallTauDist, time))
 
-                if self.combinations == 'c' and not func == 'Optimal':
-                        postProcess(self.data, self.params, func, sigma)
+                if self.combinations == 'c' and not func == 'Opt':
+                        postProcess(self.data, self.params, func, sigma, time)
             
             
     def parseListArg(self, s):
@@ -399,7 +399,7 @@ class Simulation:
         else:
             print("wrong usage! second argument should be 'r' or 's'")
             return
-            
+
         # run all functions
         self.handleFunc(algs)
 

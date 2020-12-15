@@ -3,7 +3,7 @@ import utils
 import quick_sort_base as qsb
 import random
 
-ALGORITHM_NAME = "QS RAND"
+ALGORITHM_NAME = "QS-Rand"
 
 def run(data, params):
     """

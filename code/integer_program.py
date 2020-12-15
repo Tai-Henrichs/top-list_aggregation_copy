@@ -156,7 +156,7 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     model.setObjective(kendall_dist)
 
     # msg = False suppresses log information
-    model.solve(plp.PULP_CBC_CMD(msg=False))
+    model.solve(plp.GUROBI(msg=False))
 
     # Dictionary to track how many candidates a given candidate precedes
     precedenceFreqency = {i:0 for i in indices}
