@@ -14,7 +14,6 @@ class Filter:
         self.Ns = {}
         self.ths = {}
         self.ks = {}
-        self.eps = {}
         self.algos = {}
 
         self.readData(directory)
@@ -71,8 +70,6 @@ class Filter:
 
             self.processAlgos(f) 
 
-        print(self.ths[0.01])
-    
 
 
     def getfilenames(self,dir):
@@ -151,12 +148,30 @@ class Filter:
         return data
 
 
-    def filter_by_ep(self,ep):
-        pass
+    def get_ep_files(self):
+        return self.topk
 
-    def filter_by_algo_and_param(self, alg_label, param_label, param_val):
-        pass
 
+    def filter_by_param_and_algo(self, param_label, param_val, alg_name):
+        if param_label == 'n':
+            data = self.genericFilter(self.ns[param_val])
+        elif param_label == 'N':
+            data = self.genericFilter(self.Ns[param_val])
+        elif param_label == 'th':
+            data = self.genericFilter(self.ths[param_val])
+        elif param_label == 'k':
+            data = self.genericFilter(self.ks[param_val])
+        else:
+            print(f'Cannot filter by {param_label}. Try n, N, th, or k')
+            return
+
+        filtered_data =  [line for line in data if line.strip(" ").split(",")[0] == alg_name]
+
+        file_name = f'by_{alg_name}_and_{param_label}{param_val}.csv'
+        file_label = f'Filter by Algorithm: {alg_name} and by {param_label} = {param_val}'
+        self.writeToFile(filtered_data, file_name, file_label)
+
+        return filtered_data
 
 
     def writeToFile(self, data, filename, label=None):
@@ -168,10 +183,15 @@ class Filter:
         f.close()
 
          
-
 if __name__ == '__main__':
-    filter = Filter("../../total_combinatorial_results/")
+    """ Use int for n and N, float for th and k"""
+
+    filter = Filter("../../total-combinatorial-results/")
     #filter.filter_by_n(5)
     #filter.filter_by_th(0.001)
     #filter.filter_by_N(2000)
-    filter.filter_by_algo("FootRule+")
+    #filter.filter_by_algo("FootRule+")
+
+    #filter.filter_by_param_and_algo("th", 0.1, "OPTIMAL")
+
+    #print(filter.get_ep_files())
