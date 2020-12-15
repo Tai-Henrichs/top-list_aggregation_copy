@@ -28,11 +28,15 @@ def run(data, params, sigma=None):
     def sort(s):
         for i in range(len(s)):
             for j in range(i):
-                old_cost = utils.disagreements(s,i,i,p_matrix) + utils.disagreements(s,j,j,p_matrix)
-                curr_cost = utils.disagreements(s,i,j,p_matrix) + utils.disagreements(s,j,i,p_matrix)
+                old_cost = utils.disagreements(s,i,i,p_matrix)
+                curr_cost = utils.disagreements(s,i,j,p_matrix)
+
                 if curr_cost < old_cost:
-                    # swap candidates and move on to next i
-                    s[i], s[j] = s[j], s[i]
+                    # retrieve candidate
+                    cand = s[i]
+                    # move candidate from pos i to pos b
+                    s = np.delete(s, i)
+                    s = np.insert(s, j, cand)
                     break
         return s
 
