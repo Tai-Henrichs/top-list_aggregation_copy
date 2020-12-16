@@ -24,6 +24,7 @@ for postProcessAlgo in postProcessAlgos:
             algorithms.append(f"{initialAlgorithm}_{postProcessAlgo}")
 
 f = search.Search("../Synthetic-Results/")
+algorithms = list(algorithms)
 
 def convert_to_npArray(filename):
     return np.genfromtxt(filename, delimiter=',', skip_header=1, usecols = (1,2))
@@ -54,17 +55,17 @@ def by(parameter):
 
     for j in range(len(l)):
         algs = np.empty((numAlgorithms,2))
-        for algo in algorithms:
-            _, fname = f.filter_by_param_and_algo(parameter, l[j], algo)
+        for i in range(len(algorithms)):
+            _, fname = f.filter_by_param_and_algo(parameter, l[j], algorithms[i])
             arr = convert_to_npArray(fname)
-            np.append(algs,average(arr))
+            algs[i] = average(arr)
             
         out[j] = algs
     return out
 
 
 if __name__ == '__main__':
-    print(by('n'))
-    print(by('N'))
-    print(by('th'))
-    print(by('k'))
+    print(f'By n: {run_experiments.ns}\n {by("n")}\n')
+    print(f'By N: {run_experiments.Ns}\n {by("N")}\n')
+    print(f'By th: {run_experiments.ths}\n {by("th")}\n')
+    print(f'By k: {run_experiments.ks_ratio}\n {by("k")}\n')

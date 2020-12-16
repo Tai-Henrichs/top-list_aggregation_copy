@@ -71,8 +71,6 @@ class Search:
 
             self.processAlgos(f) 
 
-        print(self.ks)
-
 
 
     def getfilenames(self,dir):
