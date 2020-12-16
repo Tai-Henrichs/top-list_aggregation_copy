@@ -63,7 +63,6 @@ class Filter:
             # process ks
             try:
                 curr_k = float(tokens[5][1:-4]) / curr_n
-                print("here")
             except:
                 print("Invalid k: ")
                 print(tokens[5])

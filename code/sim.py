@@ -254,7 +254,7 @@ class Simulation:
         """
 
         def postProcess(data, params, preProcessAlgo, baseList, preTime):
-            postProcessAlgos = {"Chanas", "Local-Search"}
+            postProcessAlgos = ["Chanas", "Local-Search"]
 
             for postProcessAlgo in postProcessAlgos:
                 if not postProcessAlgo == preProcessAlgo:
