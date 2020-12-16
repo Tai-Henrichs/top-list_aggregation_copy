@@ -69,7 +69,7 @@ def by(parameter):
 
 
 if __name__ == '__main__':
-    print(by('n'))
-    print(by('N'))
-    print(by('th'))
-    print(by('k'))
+    print(f'By n: {run_experiments.ns}\n {by("n")}\n')
+    print(f'By N: {run_experiments.Ns}\n {by("N")}\n')
+    print(f'By th: {run_experiments.ths}\n {by("th")}\n')
+    print(f'By k: {run_experiments.ks_ratio}\n {by("k")}\n')
