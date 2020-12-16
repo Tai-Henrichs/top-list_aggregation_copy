@@ -9,14 +9,18 @@ sim = sim.Simulation()
 # deque since indexed access not required
 algorithms = collections.deque(sim.funcDict.keys())
 
+# functionality not required for algorithms with epsilon parameters
+algorithms.remove("Score-Then-Adjust")
+algorithms.remove("Score-Then-Adjust-Relaxed")
+
+algorithmsBaseCopy = tuple(algorithms)
+
 # add combination algorithms
 postProcessAlgos = ["Chanas", "Local-Search"]
 for postProcessAlgo in postProcessAlgos:
-    # Iterate over shallow copy to prevent 
-    # errors from modifying algorithms within 
-    # the inner for-loop
-    for initialAlgorithm in algorithms.copy():
-        if not initialAlgorithm == postProcessAlgo:
+    # Iterate over algorithmsBaseCopy
+    for initialAlgorithm in algorithmsBaseCopy:
+        if not initialAlgorithm == postProcessAlgo and not initialAlgorithm == "Opt":
             algorithms.append(f"{initialAlgorithm}_{postProcessAlgo}")
 
 f = F.Filter("../Synthetic-Results/")
@@ -53,6 +57,8 @@ def by(parameter):
         for algo in algorithms:
             _, fname = f.filter_by_param_and_algo(parameter, l[j], algo)
             arr = convert_to_npArray(fname)
+            print(f"File name {fname}")
+            print(f"File {arr}")
             np.append(algs,average(arr))
             
         out[j] = algs
