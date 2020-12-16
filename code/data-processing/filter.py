@@ -63,12 +63,16 @@ class Filter:
             # process ks
             try:
                 curr_k = float(tokens[5][1:-4]) / curr_n
+                print("here")
             except:
                 print("Invalid k: ")
                 print(tokens[5])
                 return
+            self.addToDict(self.ks, curr_k, f)
 
             self.processAlgos(f) 
+
+        print(self.ks)
 
 
 
@@ -109,7 +113,7 @@ class Filter:
         label = f'Filtering by k = {k}'
         data =  self.genericFilter(self.ks[k])
         self.writeToFile(data, outFile_name, label) 
-        return data
+        return data, outFile_name
 
     
     def filter_by_th(self,th, outFile_name=None):
@@ -118,7 +122,7 @@ class Filter:
         label = f'Filtering by th = {th}'
         data =  self.genericFilter(self.ths[th])
         self.writeToFile(data, outFile_name, label) 
-        return data
+        return data, outFile_name
 
     
     def filter_by_n(self,n, outFile_name=None):
@@ -127,7 +131,7 @@ class Filter:
         label = f'Filtering by n = {n}'
         data =  self.genericFilter(self.ns[n])
         self.writeToFile(data, outFile_name, label) 
-        return data
+        return data, outFile_name
 
     
     def filter_by_N(self,N, outFile_name=None):
@@ -136,7 +140,7 @@ class Filter:
         label = f'Filtering by N = {N}'
         data =  self.genericFilter(self.Ns[N])
         self.writeToFile(data, outFile_name, label) 
-        return data
+        return data, outFile_name
 
 
     def filter_by_algo(self,alg_name, outFile_name=None):
@@ -145,7 +149,7 @@ class Filter:
         label = f'Filter by Algorithm: {alg_name}'
         data = self.algos[alg_name]
         self.writeToFile(data, outFile_name, label)
-        return data
+        return data, outFile_name
 
 
     def get_ep_files(self):
@@ -171,7 +175,7 @@ class Filter:
         file_label = f'Filter by Algorithm: {alg_name} and by {param_label} = {param_val}'
         self.writeToFile(filtered_data, file_name, file_label)
 
-        return filtered_data
+        return filtered_data, file_name
 
 
     def writeToFile(self, data, filename, label=None):
@@ -181,17 +185,3 @@ class Filter:
         for v in data:
             f.write(f'{v}')
         f.close()
-
-         
-if __name__ == '__main__':
-    """ Use int for n and N, float for th and k"""
-
-    filter = Filter("../../total-combinatorial-results/")
-    #filter.filter_by_n(5)
-    #filter.filter_by_th(0.001)
-    #filter.filter_by_N(2000)
-    #filter.filter_by_algo("FootRule+")
-
-    #filter.filter_by_param_and_algo("th", 0.1, "OPTIMAL")
-
-    #print(filter.get_ep_files())
