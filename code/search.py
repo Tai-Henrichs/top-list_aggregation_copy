@@ -3,7 +3,7 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join
 
-class Filter:
+class Search:
 
     def __init__(self, directory):
         self.directory = directory

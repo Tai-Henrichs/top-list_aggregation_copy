@@ -1,5 +1,5 @@
 import numpy as np
-import filter as F
+import search
 import sim 
 import run_experiments
 import collections
@@ -23,7 +23,7 @@ for postProcessAlgo in postProcessAlgos:
         if not initialAlgorithm == postProcessAlgo and not initialAlgorithm == "Opt":
             algorithms.append(f"{initialAlgorithm}_{postProcessAlgo}")
 
-f = F.Filter("../Synthetic-Results/")
+f = search.Search("../Synthetic-Results/")
 
 def convert_to_npArray(filename):
     return np.genfromtxt(filename, delimiter=',', skip_header=1, usecols = (1,2))
@@ -57,8 +57,6 @@ def by(parameter):
         for algo in algorithms:
             _, fname = f.filter_by_param_and_algo(parameter, l[j], algo)
             arr = convert_to_npArray(fname)
-            print(f"File name {fname}")
-            print(f"File {arr}")
             np.append(algs,average(arr))
             
         out[j] = algs
