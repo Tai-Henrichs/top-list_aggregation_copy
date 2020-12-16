@@ -55,7 +55,7 @@ master += [f'python3 sim.py [Opt,Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep
 #--------------------------------------
 
 
-# REAL WORLD DATA
+""" # REAL WORLD DATA
 
 # Total # real world datasets: 38, i.e. len(fnames) = 38
 
@@ -63,9 +63,9 @@ PATH = '../data/soi/'
 
 fnames = [f for f in listdir(PATH) if isfile(join(PATH, f))]
 
-master += [f'python3 sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,Quick-Sort-Rand,Quick-Sort-Det,Insertion-Sort,Opt] r {PATH}{fname} c {SEED}'
+master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,QS-Rand,QS-Det,IS,Opt] r {PATH}{fname} c {SEED}'
             for fname in fnames
-            ]
+            ] """
 
 #--------------------------------------
 
