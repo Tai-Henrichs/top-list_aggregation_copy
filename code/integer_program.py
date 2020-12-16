@@ -70,10 +70,13 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     """
     # 'n' is the number of candidates, also the number of ranks
     n = params['n']
+
+    # 'N' is the number of voters
+    N = params['N']
     
     # Handle default arguments
     if baseList is None:
-        baseList = tuple(i for i in range(n))
+        baseList = [i for i in range(n)]
 
     if permBound is None or permBound > n:
         permBound = n
@@ -86,7 +89,22 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     programType = "Linear" if lpRelaxation else "Integer"
     model = plp.LpProblem(f"Kemeny{separator}{programType}{separator}Program")
 
-    indices = baseList[:permBound]
+    indices = set(baseList[:permBound])
+    # Remove unranked candidates since they contribute nothing to the cost
+    unrankedCandidates = set(utils.unrankedAlternatives(data, n ,N))
+
+    # Indices will contain only candidates in the permutable portion
+    # of baseList that are ranked at least once   
+    permutableUnrankedCandidates = indices & unrankedCandidates
+    indices = list(indices - permutableUnrankedCandidates)
+
+    fixedElements = baseList[permBound:]
+
+    if len(indices) <= 1:
+        indices.extend(permutableUnrankedCandidates)
+        indices.extend(fixedElements)
+        return tuple(indices)
+    
     indexPermutations = tuple(pair for pair in itertools.permutations(indices, r=2))
     indexCombinations = tuple(pair for pair in itertools.combinations(indices, r=2))
     
@@ -130,13 +148,14 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     # Enforce transitivity: if i precedes j, and j precedes k, i must precede k
     # Uses permutations because enforicing transitivity requires considering 
     # different potential orderings of i, j, and k relative to each other
-    for i,j,k in itertools.permutations(indices, r=3):
-        model.addConstraint(plp.LpConstraint(
-                            e=plp.LpAffineExpression(
-                                [(x_vars[(i,j)], 1), (x_vars[(j,k)], 1), (x_vars[(k,i)], 1)]),
-                            sense=plp.LpConstraintGE,
-                            rhs=1,
-                            name=f"Transitivity{separator}{i}{separator}{j}{separator}{k}"))
+    if len(indices) >= 3:
+        for i,j,k in itertools.permutations(indices, r=3):
+            model.addConstraint(plp.LpConstraint(
+                                e=plp.LpAffineExpression(
+                                    [(x_vars[(i,j)], 1), (x_vars[(j,k)], 1), (x_vars[(k,i)], 1)]),
+                                sense=plp.LpConstraintGE,
+                                rhs=1,
+                                name=f"Transitivity{separator}{i}{separator}{j}{separator}{k}"))
 
     # Define the objective function for Kemeny
     # If a list ranks j before i, then the contributed cost is the number 
@@ -179,11 +198,15 @@ def solve(data, params, lpRelaxation=False, baseList=None, permBound=None):
     sigma = [candidate for candidate, _ in precedenceFreqency.items()]
     sigma.sort(key=lambda num : precedenceFreqency[num], reverse=True)
 
+    # Add back the unranked candidates
+    # that were in the permutable portion 
+    # of baseList
+    sigma.extend(permutableUnrankedCandidates)
+
     # Append the fixed portion of baseList onto 
     # the optimal sigma, assuming some items of 
     # the baseList are fixed
     if permBound < n:
-        fixedElements = baseList[permBound:]
         sigma.extend(fixedElements)
 
     # Convert to tuple for consistency

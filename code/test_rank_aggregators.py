@@ -57,8 +57,8 @@ def test(data, params, testName, kemenyBound=None):
                 print(f"{name}'s ranking is missing a candidate: {sigma}\n")
                 testPassed = False
     
-    optimalScore = allScores["Optimal"][0]
-    optimalList = allScores["Optimal"][1]
+    optimalScore = allScores["Opt"][0]
+    optimalList = allScores["Opt"][1]
 
     for name, results in allScores.items():
         score, ranking = results 
