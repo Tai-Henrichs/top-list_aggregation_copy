@@ -23,6 +23,9 @@ for postProcessAlgo in postProcessAlgos:
         if not initialAlgorithm == postProcessAlgo and not initialAlgorithm == "Opt":
             algorithms.append(f"{initialAlgorithm}_{postProcessAlgo}")
 
+# convert back to a list to support indexing
+algorithms = list(algorithms)
+
 f = F.Filter("../Synthetic-Results/")
 
 def convert_to_npArray(filename):
@@ -54,12 +57,12 @@ def by(parameter):
 
     for j in range(len(l)):
         algs = np.empty((numAlgorithms,2))
-        for algo in algorithms:
-            _, fname = f.filter_by_param_and_algo(parameter, l[j], algo)
+        for i in range(len(algorithms)):
+            _, fname = f.filter_by_param_and_algo(parameter, l[j], algorithms[i])
             arr = convert_to_npArray(fname)
-            print(f"File name {fname}")
-            print(f"File {arr}")
-            np.append(algs,average(arr))
+            #print(f"File name {fname}")
+            #print(f"File {arr}")
+            algs[i] = average(arr)
             
         out[j] = algs
     return out

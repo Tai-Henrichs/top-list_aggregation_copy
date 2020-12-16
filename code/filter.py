@@ -71,8 +71,6 @@ class Filter:
 
             self.processAlgos(f) 
 
-        print(self.ks)
-
 
 
     def getfilenames(self,dir):
