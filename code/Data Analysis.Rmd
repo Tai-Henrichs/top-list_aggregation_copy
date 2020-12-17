@@ -1,0 +1,30 @@
+---
+title: "Top-List Rank Aggregation Data Analysis"
+author: "Ammar Eltigani and Tai Henrichs"
+date: "12/15/2020"
+output: html_document
+---
+
+```{r,echo=FALSE}
+library(tidyverse)
+library(reticulate)
+```
+
+
+```{python,echo=FALSE,results='hide'}
+import numpyfy
+
+over_n <- numpyfy.by('n')
+over_N <- numpyfy.by('N')
+over_th <- numpyfy.by('th')
+over_k <- numpyfy.by('k')
+
+allAlgorithms = numpyfy.algorithms
+```
+
+
+```{r}
+py$over_th
+thetaTime <- tibble(py$allAlgorithms)
+```
+
