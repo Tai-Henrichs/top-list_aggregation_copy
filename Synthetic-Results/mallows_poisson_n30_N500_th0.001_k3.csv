@@ -19,3 +19,15 @@ Local-Search_Chanas, 36.442, 156.25000
 Chanas, 38.418, 46.87500
 Chanas_Local-Search, 36.434, 156.25000
 Opt, 36.434, 3328.12500
+Copeland, 36.536, 31.25000
+Copeland_Chanas, 36.472, 78.12500
+Copeland_Local-Search, 36.434, 109.37500
+QS-Rand, 37.618, 31.25000
+QS-Rand_Chanas, 36.85, 78.12500
+QS-Rand_Local-Search, 36.434, 140.62500
+QS-Det, 40.366, 31.25000
+QS-Det_Chanas, 37.462, 62.50000
+QS-Det_Local-Search, 36.442, 125.00000
+IS, 36.596, 31.25000
+IS_Chanas, 36.554, 62.50000
+IS_Local-Search, 36.434, 125.00000

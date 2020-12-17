@@ -220,7 +220,7 @@ def perfByParamPlot(parameter):
 
 
 if __name__ == '__main__':
-    """ overallComparison()
+    overallComparison()
     syntheticFiles = ["mallows_topk_n50_N5000_th0.001_k45.csv",
                     "mallows_topk_n30_N500_th0.01_k15.csv",
                         "mallows_topk_n10_N50_th0.1_k2.csv"]
@@ -231,7 +231,7 @@ if __name__ == '__main__':
                                 "CED-00010-00000050.csv"]
                             
     for name in realFiles:
-        fileComparison(name, realDirectory) """
+        fileComparison(name, realDirectory)
 
     for param in ["n", "N", "th", "k"]:
         perfByParamPlot(param)

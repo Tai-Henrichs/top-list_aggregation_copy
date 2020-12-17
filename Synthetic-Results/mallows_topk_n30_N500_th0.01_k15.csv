@@ -1,141 +1,93 @@
 ALGORITHM, DISTANCE, TIME
-FootRule+, 155.6, 0.00000
-FootRule+_Chanas, 155.17, 109.37500
-FootRule+_Local-Search, 154.83, 156.25000
-RandomSort, 162.768, 31.25000
-RandomSort_Chanas, 157.13, 140.62500
-RandomSort_Local-Search, 154.83, 203.12500
-Borda+, 161.05, 15.62500
-Borda+_Chanas, 156.624, 125.00000
-Borda+_Local-Search, 154.83, 187.50000
-Score-Then-Borda+, 161.05, 15.62500
-Score-Then-Borda+_Chanas, 156.624, 125.00000
-Score-Then-Borda+_Local-Search, 154.828, 218.75000
-Relaxed-Linear-Program, 154.828, 3734.37500
-Relaxed-Linear-Program_Chanas, 154.828, 3843.75000
-Relaxed-Linear-Program_Local-Search, 154.828, 3843.75000
-Local-Search, 154.83, 203.12500
-Local-Search_Chanas, 154.83, 328.12500
-Chanas, 157.25, 109.37500
-Chanas_Local-Search, 154.83, 265.62500
-Copeland, 174.844, 109.37500
-Copeland_Chanas, 155.096, 203.12500
-Copeland_Local-Search, 154.828, 281.25000
-QS-Rand, 168.994, 109.37500
-QS-Rand_Chanas, 158.286, 203.12500
-QS-Rand_Local-Search, 154.83, 296.87500
-QS-Det, 168.362, 109.37500
-QS-Det_Chanas, 158.246, 218.75000
-QS-Det_Local-Search, 154.83, 312.50000
-IS, 174.646, 109.37500
-IS_Chanas, 155.194, 218.75000
-IS_Local-Search, 154.83, 312.50000
-Opt, 154.828, 3453.12500
-Score-Then-Adjust-0.25, 154.828, 3609.37500
-Score-Then-Adjust-0.25_Chanas, 154.828, 3718.75000
-Score-Then-Adjust-0.25_Local-Search, 154.828, 3718.75000
-FootRule+, 155.6, 15.62500
-FootRule+_Chanas, 155.17, 140.62500
-FootRule+_Local-Search, 154.83, 171.87500
-RandomSort, 162.768, 31.25000
-RandomSort_Chanas, 157.13, 140.62500
-RandomSort_Local-Search, 154.83, 218.75000
-Borda+, 161.05, 15.62500
-Borda+_Chanas, 156.624, 125.00000
-Borda+_Local-Search, 154.83, 203.12500
-Score-Then-Borda+, 161.05, 15.62500
-Score-Then-Borda+_Chanas, 156.624, 125.00000
-Score-Then-Borda+_Local-Search, 154.828, 234.37500
-Relaxed-Linear-Program, 154.828, 3625.00000
-Relaxed-Linear-Program_Chanas, 154.828, 3750.00000
-Relaxed-Linear-Program_Local-Search, 154.828, 3750.00000
-Local-Search, 154.83, 187.50000
-Local-Search_Chanas, 154.83, 296.87500
-Chanas, 157.25, 109.37500
-Chanas_Local-Search, 154.83, 281.25000
-Copeland, 174.844, 109.37500
-Copeland_Chanas, 155.096, 218.75000
-Copeland_Local-Search, 154.828, 296.87500
-QS-Rand, 170.082, 109.37500
-QS-Rand_Chanas, 156.442, 218.75000
-QS-Rand_Local-Search, 154.83, 296.87500
-QS-Det, 168.362, 109.37500
-QS-Det_Chanas, 158.246, 218.75000
-QS-Det_Local-Search, 154.83, 328.12500
-IS, 174.646, 93.75000
-IS_Chanas, 155.194, 203.12500
-IS_Local-Search, 154.83, 296.87500
-Opt, 154.828, 3421.87500
-Score-Then-Adjust-0.5, 154.828, 3609.37500
-Score-Then-Adjust-0.5_Chanas, 154.828, 3718.75000
-Score-Then-Adjust-0.5_Local-Search, 154.828, 3718.75000
-FootRule+, 155.6, 15.62500
-FootRule+_Chanas, 155.17, 125.00000
-FootRule+_Local-Search, 154.83, 171.87500
-RandomSort, 162.768, 15.62500
-RandomSort_Chanas, 157.13, 125.00000
-RandomSort_Local-Search, 154.83, 187.50000
-Borda+, 161.05, 15.62500
-Borda+_Chanas, 156.624, 156.25000
-Borda+_Local-Search, 154.83, 234.37500
-Score-Then-Borda+, 161.05, 15.62500
-Score-Then-Borda+_Chanas, 156.624, 125.00000
-Score-Then-Borda+_Local-Search, 154.828, 218.75000
-Relaxed-Linear-Program, 154.828, 3609.37500
-Relaxed-Linear-Program_Chanas, 154.828, 3734.37500
-Relaxed-Linear-Program_Local-Search, 154.828, 3734.37500
-Local-Search, 154.83, 234.37500
-Local-Search_Chanas, 154.83, 375.00000
-Chanas, 157.25, 125.00000
-Chanas_Local-Search, 154.83, 343.75000
-Copeland, 174.844, 125.00000
-Copeland_Chanas, 155.096, 234.37500
-Copeland_Local-Search, 154.828, 312.50000
-QS-Rand, 171.564, 109.37500
-QS-Rand_Chanas, 157.528, 218.75000
-QS-Rand_Local-Search, 154.83, 296.87500
-QS-Det, 168.362, 109.37500
-QS-Det_Chanas, 158.246, 218.75000
-QS-Det_Local-Search, 154.83, 328.12500
-IS, 174.646, 109.37500
-IS_Chanas, 155.194, 218.75000
-IS_Local-Search, 154.83, 312.50000
-Opt, 154.828, 3421.87500
-Score-Then-Adjust-0.75, 154.828, 3625.00000
-Score-Then-Adjust-0.75_Chanas, 154.828, 3734.37500
-Score-Then-Adjust-0.75_Local-Search, 154.828, 3734.37500
-FootRule+, 155.6, 15.62500
-FootRule+_Chanas, 155.17, 125.00000
-FootRule+_Local-Search, 154.83, 171.87500
-RandomSort, 162.768, 31.25000
-RandomSort_Chanas, 157.13, 140.62500
-RandomSort_Local-Search, 154.83, 203.12500
-Borda+, 161.05, 15.62500
-Borda+_Chanas, 156.624, 125.00000
-Borda+_Local-Search, 154.83, 203.12500
-Score-Then-Borda+, 161.05, 15.62500
-Score-Then-Borda+_Chanas, 156.624, 125.00000
-Score-Then-Borda+_Local-Search, 154.828, 218.75000
-Relaxed-Linear-Program, 154.828, 3625.00000
-Relaxed-Linear-Program_Chanas, 154.828, 3734.37500
-Relaxed-Linear-Program_Local-Search, 154.828, 3734.37500
-Local-Search, 154.83, 203.12500
-Local-Search_Chanas, 154.83, 328.12500
-Chanas, 157.25, 109.37500
-Chanas_Local-Search, 154.83, 265.62500
-Copeland, 174.844, 93.75000
-Copeland_Chanas, 155.096, 203.12500
-Copeland_Local-Search, 154.828, 265.62500
-QS-Rand, 171.456, 109.37500
-QS-Rand_Chanas, 156.99, 203.12500
-QS-Rand_Local-Search, 154.83, 328.12500
-QS-Det, 168.362, 109.37500
-QS-Det_Chanas, 158.246, 218.75000
-QS-Det_Local-Search, 154.828, 296.87500
-IS, 174.646, 109.37500
-IS_Chanas, 155.194, 218.75000
-IS_Local-Search, 154.828, 312.50000
-Opt, 154.828, 3453.12500
-Score-Then-Adjust-1.0, 154.918, 2968.75000
-Score-Then-Adjust-1.0_Chanas, 154.886, 3093.75000
-Score-Then-Adjust-1.0_Local-Search, 154.83, 3109.37500
+FootRule+,155.6,0
+FootRule+_Chanas,155.17,109.375
+FootRule+_Local-Search,154.83,156.25
+RandomSort,162.768,31.25
+RandomSort_Chanas,157.13,140.625
+RandomSort_Local-Search,154.83,203.125
+Borda+,161.05,15.625
+Borda+_Chanas,156.624,125
+Borda+_Local-Search,154.83,187.5
+Score-Then-Borda+,161.05,15.625
+Score-Then-Borda+_Chanas,156.624,125
+Score-Then-Borda+_Local-Search,154.828,218.75
+Relaxed-Linear-Program,154.828,3734.375
+Relaxed-Linear-Program_Chanas,154.828,3843.75
+Relaxed-Linear-Program_Local-Search,154.828,3843.75
+Local-Search,154.83,203.125
+Local-Search_Chanas,154.83,328.125
+Chanas,157.25,109.375
+Chanas_Local-Search,154.83,265.625
+Opt,154.828,3453.125
+Score-Then-Adjust-0.25,154.828,3609.375
+Score-Then-Adjust-0.25_Chanas,154.828,3718.75
+Score-Then-Adjust-0.25_Local-Search,154.828,3718.75
+FootRule+,155.6,15.625
+FootRule+_Chanas,155.17,140.625
+FootRule+_Local-Search,154.83,171.875
+RandomSort,162.768,31.25
+RandomSort_Chanas,157.13,140.625
+RandomSort_Local-Search,154.83,218.75
+Borda+,161.05,15.625
+Borda+_Chanas,156.624,125
+Borda+_Local-Search,154.83,203.125
+Score-Then-Borda+,161.05,15.625
+Score-Then-Borda+_Chanas,156.624,125
+Score-Then-Borda+_Local-Search,154.828,234.375
+Relaxed-Linear-Program,154.828,3625
+Relaxed-Linear-Program_Chanas,154.828,3750
+Relaxed-Linear-Program_Local-Search,154.828,3750
+Local-Search,154.83,187.5
+Local-Search_Chanas,154.83,296.875
+Chanas,157.25,109.375
+Chanas_Local-Search,154.83,281.25
+Opt,154.828,3421.875
+Score-Then-Adjust-0.5,154.828,3609.375
+Score-Then-Adjust-0.5_Chanas,154.828,3718.75
+Score-Then-Adjust-0.5_Local-Search,154.828,3718.75
+FootRule+,155.6,15.625
+FootRule+_Chanas,155.17,125
+FootRule+_Local-Search,154.83,171.875
+RandomSort,162.768,15.625
+RandomSort_Chanas,157.13,125
+RandomSort_Local-Search,154.83,187.5
+Borda+,161.05,15.625
+Borda+_Chanas,156.624,156.25
+Borda+_Local-Search,154.83,234.375
+Score-Then-Borda+,161.05,15.625
+Score-Then-Borda+_Chanas,156.624,125
+Score-Then-Borda+_Local-Search,154.828,218.75
+Relaxed-Linear-Program,154.828,3609.375
+Relaxed-Linear-Program_Chanas,154.828,3734.375
+Relaxed-Linear-Program_Local-Search,154.828,3734.375
+Local-Search,154.83,234.375
+Local-Search_Chanas,154.83,375
+Chanas,157.25,125
+Chanas_Local-Search,154.83,343.75
+Opt,154.828,3421.875
+Score-Then-Adjust-0.75,154.828,3625
+Score-Then-Adjust-0.75_Chanas,154.828,3734.375
+Score-Then-Adjust-0.75_Local-Search,154.828,3734.375
+FootRule+,155.6,15.625
+FootRule+_Chanas,155.17,125
+FootRule+_Local-Search,154.83,171.875
+RandomSort,162.768,31.25
+RandomSort_Chanas,157.13,140.625
+RandomSort_Local-Search,154.83,203.125
+Borda+,161.05,15.625
+Borda+_Chanas,156.624,125
+Borda+_Local-Search,154.83,203.125
+Score-Then-Borda+,161.05,15.625
+Score-Then-Borda+_Chanas,156.624,125
+Score-Then-Borda+_Local-Search,154.828,218.75
+Relaxed-Linear-Program,154.828,3625
+Relaxed-Linear-Program_Chanas,154.828,3734.375
+Relaxed-Linear-Program_Local-Search,154.828,3734.375
+Local-Search,154.83,203.125
+Local-Search_Chanas,154.83,328.125
+Chanas,157.25,109.375
+Chanas_Local-Search,154.83,265.625
+Opt,154.828,3453.125
+Score-Then-Adjust-1.0,154.918,2968.75
+Score-Then-Adjust-1.0_Chanas,154.886,3093.75
+Score-Then-Adjust-1.0_Local-Search,154.83,3109.375

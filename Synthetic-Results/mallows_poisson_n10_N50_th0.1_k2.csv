@@ -1,0 +1,13 @@
+ALGORITHM, DISTANCE, TIME
+Copeland, 6.7, 0.00000
+Copeland_Chanas, 6.7, 0.00000
+Copeland_Local-Search, 6.7, 0.00000
+QS-Rand, 7.5, 0.00000
+QS-Rand_Chanas, 6.92, 0.00000
+QS-Rand_Local-Search, 6.7, 15.62500
+QS-Det, 7.64, 0.00000
+QS-Det_Chanas, 6.76, 0.00000
+QS-Det_Local-Search, 6.7, 15.62500
+IS, 6.7, 0.00000
+IS_Chanas, 6.7, 0.00000
+IS_Local-Search, 6.7, 15.62500
