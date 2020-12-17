@@ -61,6 +61,11 @@ def barChart(x, y, groupBy, df):
 
 def scatterPlot(x, y, groupBy, df):
     expansion = (2,2.2)
+    df = df[df.Algorithms != "Opt"]
+
+    for postProcess in ["Chanas", "Local-Search"]:
+        df = df[df.Algorithms != f"Relaxed-Linear-Program_{postProcess}"]
+
     adjusttext_settings = {'arrowprops': {
                                 'arrowstyle': '->',
                                 'color': 'black'
@@ -173,8 +178,8 @@ def fileComparison(fileName, folder):
     outputLabel = f"{label}{fileType}"
     scatterPlot(x, y, groupBy, data).save(f"scatter_{outputLabel}")
     
-    barChart(groupBy, x, groupBy, data).save(f"{x}_bar_{outputLabel}")
-    barChart(groupBy, y, groupBy, data).save(f"{y}_bar_{outputLabel}")
+    """ barChart(groupBy, x, groupBy, data).save(f"{x}_bar_{outputLabel}")
+    barChart(groupBy, y, groupBy, data).save(f"{y}_bar_{outputLabel}") """
 
 
 def overallComparison():
