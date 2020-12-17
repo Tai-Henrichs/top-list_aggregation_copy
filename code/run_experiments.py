@@ -24,12 +24,12 @@ if __name__ == '__main__':
     #-------------------------------------
 
     # SYNTHETIC DATA
-    master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,QS-Rand,QS-Det,IS,Opt] s [{n},{N},{th},{k*n}] c {SEED}'
+    """ master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,QS-Rand,QS-Det,IS,Opt] s [{n},{N},{th},{k*n}] c {SEED}'
                 for k in ks_ratio
                 for n in ns
                 for N in Ns
                 for th in ths
-                ]
+                ] """
 
     # Varying epsilon with three sets of other params, one low, one medium, and one high 
     # by low we mean a smaller value for n, N, and k, and larger for th (smaller and high consensus dataset)
@@ -39,17 +39,17 @@ if __name__ == '__main__':
     # Total epsilon datasets = 8*3 = 16
 
     # n = 10, N = 50, th = 0.1, k = 2 
-    master += [f'python sim.py [Opt,Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [10,50,0.1,2] c {SEED}'
+    master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,QS-Rand,QS-Det,IS,Opt,Score-Then-Adjust,{ep}] s [10,50,0.1,2] c {SEED}'
                 for ep in epsilons
                 ]
 
     # n = 30, N = 500, th = 0.01, k = 15 
-    master += [f'python sim.py [Opt,Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [30,500,0.01,15] c {SEED}'
+    master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,QS-Rand,QS-Det,IS,Opt,Score-Then-Adjust,{ep}] s [30,500,0.01,15] c {SEED}'
                 for ep in epsilons
                 ]
 
     # n = 50, N = 5000, th = 0.001, k = 45 
-    master += [f'python sim.py [Opt,Score-Then-Adjust,Score-Then-Adjust-Relaxed,{ep}] s [50,5000,0.001,45] c {SEED}'
+    master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,QS-Rand,QS-Det,IS,Opt,Score-Then-Adjust,{ep}] s [50,5000,0.001,45] c {SEED}'
                 for ep in epsilons
                 ]
 

@@ -13,18 +13,29 @@ library(reticulate)
 
 ```{python,echo=FALSE,results='hide'}
 import numpyfy
+import run_experiments
 
-over_n <- numpyfy.by('n')
-over_N <- numpyfy.by('N')
-over_th <- numpyfy.by('th')
-over_k <- numpyfy.by('k')
+over_n = numpyfy.by('n')
+over_N = numpyfy.by('N')
+over_th = numpyfy.by('th')
+over_k = numpyfy.by('k')
 
-allAlgorithms = numpyfy.algorithms
+allAlgorithms = list(numpyfy.algorithms)
+
+ns = run_experiments.ns
+Ns = run_experiments.Ns
+thetas = run_experiments.ths
+
+ks = list()
+for n in ns:
+  for ratio in run_experiments.ks_ratio:
+    ks.append(ratio * n)
 ```
 
 
+
 ```{r}
-py$over_th
 thetaTime <- tibble(py$allAlgorithms)
+
 ```
 

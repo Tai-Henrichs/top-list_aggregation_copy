@@ -38,7 +38,6 @@ class Search:
                 curr_n = int(tokens[2][1:])
             except:
                 print("Invalid n: ")
-                print(tokens[2])
                 return
             self.addToDict(self.ns, curr_n, f)
     
@@ -47,7 +46,6 @@ class Search:
                 curr_N = int(tokens[3][1:])
             except:
                 print("Invalid N: ")
-                print(tokens[3])
                 return
             self.addToDict(self.Ns, curr_N, f)
     
@@ -56,7 +54,6 @@ class Search:
                 curr_th = float(tokens[4][2:])
             except:
                 print("Invalid th: ")
-                print(tokens[4])
                 return
             self.addToDict(self.ths, curr_th, f)
     
@@ -65,7 +62,6 @@ class Search:
                 curr_k = float(tokens[5][1:-4]) / curr_n
             except:
                 print("Invalid k: ")
-                print(tokens[5])
                 return
             self.addToDict(self.ks, curr_k, f)
 

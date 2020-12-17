@@ -60,7 +60,7 @@ def run(data, params):
             j=i-1
             ch=i
             while j>=0:
-                if precedenceMatrix[ar[ch],ar[j]] < precedenceMatrix[ar[j],ar[ch]]:
+                if precedenceMatrix[ar[ch],ar[j]] > precedenceMatrix[ar[j],ar[ch]]:
                     ar[ch],ar[j]=ar[j],ar[ch]
                     ch=j
                 j-=1

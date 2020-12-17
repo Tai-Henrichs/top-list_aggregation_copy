@@ -13,7 +13,7 @@ def sub_partition(q, array, start, end, idx_pivot):
     j = start + 1
 
     while j <= end:
-        if q[j,pivot] <= q[pivot,j]:
+        if q[j,pivot] >= q[pivot,j]:
             array[j], array[i] = array[i], array[j]
             i += 1
         j += 1

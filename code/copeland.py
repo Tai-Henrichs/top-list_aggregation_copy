@@ -52,7 +52,12 @@ def run(data, params):
     # (ascending order with lexicographic tie-breaking)
     precedenceMatrix = utils.precedenceMatrix(data, n)
 
+    # save results to avoid re-computation
+    pairwiseVictores = [-1 for i in range(n)]
     def totalPairwiseVictories(i):
+        if not pairwiseVictores[i] == -1:
+            return pairwiseVictores[i]
+
         totalVictories = 0
         for j in range(n):
             # If candidates i and j beat each 
@@ -60,10 +65,12 @@ def run(data, params):
             # each have a victory
             if precedenceMatrix[i,j] >= precedenceMatrix[j,i]:
                 totalVictories += 1
+
+        pairwiseVictores[i] = totalVictories
         return totalVictories
 
     candidates = [i for i in range(n)]
-    candidates.sort(key=totalPairwiseVictories, reverse=False)
+    candidates.sort(key=totalPairwiseVictories, reverse=True)
 
     sigma = tuple(candidates)
 

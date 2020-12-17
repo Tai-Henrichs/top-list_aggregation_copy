@@ -272,7 +272,8 @@ class Simulation:
                 for epsilon in self.epsilons:
                     #passes Counter object dataset as well as data specs
                     name, averageKendallTauDist, time, sigma  = alg(self.data, self.params, epsilon)
-                    self.results.append((name, averageKendallTauDist, time))
+                    func = f"{name}-{epsilon}"
+                    self.results.append((func, averageKendallTauDist, time))
 
                     if self.combinations == 'c':
                         postProcess(self.data, self.params, func, sigma, time)
