@@ -65,12 +65,12 @@ The different choices that we provide are:
 
     -------------------------------
 
-Usage: 
+#### Usage: 
 
 		python3 sim.py [algo1,algo2,...,epsilon] s [n,N,theta,k] s0[OPTIONAL] c<OR>nc seed
 		python3 sim.py [algo,algo2,...] r FILEPATH c
 
-Examples:
+#### Examples:
 
 	python3 sim.py [Opt] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] nc 0
 
