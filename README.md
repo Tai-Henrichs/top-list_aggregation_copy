@@ -79,4 +79,7 @@ The different choices that we provide are:
     python3 sim.py [FootRule+] r ../data/soi/ED-00001-00000001.csv nc
 
     python3 sim.py [Score-Then-Adjust,0.2,0.4,0.5,Score-Then-Borda+] s [5,50,0.5] nc 25
+    
+#### Reproducing
+If you are brave and for some reason want to reproduce the same plots shown in our paper (also available in the 'Visualizations' directory), run <code>run_experiments.py</code> and then try using <code>search.py</code>, <code>numpyfy.py</code>, and <code>visualizations.py</code> to make things look nice.
 

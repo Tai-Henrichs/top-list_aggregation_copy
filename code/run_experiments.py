@@ -24,7 +24,7 @@ if __name__ == '__main__':
     #-------------------------------------
 
     # SYNTHETIC DATA
-    master += [f'python sim.py [Copeland,QS-Rand,QS-Det,IS] s [{n},{N},{th},{k*n}] c {SEED}'
+    master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,QS-Rand,QS-Det,IS] s [{n},{N},{th},{k*n}] c {SEED}'
                 for k in ks_ratio
                 for n in ns
                 for N in Ns
@@ -55,13 +55,10 @@ if __name__ == '__main__':
 
     #--------------------------------------
 
-
     # REAL WORLD DATA
-
     # Total # real world datasets: 38, i.e. len(fnames) = 38
 
     PATH = '../data/soi/'
-
     fnames = [f for f in listdir(PATH) if isfile(join(PATH, f))]
 
     master += [f'python sim.py [FootRule+,RandomSort,Borda+,Score-Then-Borda+,Relaxed-Linear-Program,Local-Search,Chanas,Copeland,QS-Rand,QS-Det,IS,Opt] r {PATH}{fname} c {SEED}'
