@@ -61,8 +61,13 @@ def barChart(x, y, groupBy, df):
 
 def scatterPlot(x, y, groupBy, df):
     expansion = (2,2.2)
-    df = df[df.Algorithms != "Opt"]
 
+    # Filters out optimal solution and 
+    # all variants of the linear-program 
+    # relaxation
+    # Comment out the following code to include 
+    # them
+    df = df[df.Algorithms != "Opt"]
     for postProcess in ["Chanas", "Local-Search"]:
         df = df[df.Algorithms != f"Relaxed-Linear-Program_{postProcess}"]
 
