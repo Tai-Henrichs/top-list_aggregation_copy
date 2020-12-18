@@ -232,8 +232,7 @@ if __name__ == '__main__':
     for name in syntheticFiles:
         fileComparison(name, syntheticDirectory)
 
-    realFiles = ["CED-00010-00000046.csv",
-                                "CED-00010-00000050.csv"]
+    realFiles = ["CED-00010-00000046.csv"]
                             
     for name in realFiles:
         fileComparison(name, realDirectory)
