@@ -58,7 +58,7 @@ The different choices that we provide are:
         m. 'IS'
         n. 'Opt'
         
-	3. Whether to run combinations of algorithms 'c' or not 'nc'. Combinations entails in running Chanas and Local-Search as a postprocessing step to every other algorithm.
+	3. Whether to run combinations of algorithms 'c' or not 'nc'. Combinations entails running Chanas and Local-Search as a postprocessing step for all algorithms (except opt).
 	
     4. An optinal seed argument. If provided, all random number generation will utilize the given seed. By default, 
         random number generation will utilize the system's internal clock. 
@@ -72,7 +72,7 @@ The different choices that we provide are:
 
 #### Examples:
 
-	python3 sim.py [Opt] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] nc 0
+    python3 sim.py [Opt] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] nc 0
 
     python3 sim.py [Chanas,RandomSort,Borda+,FootRule+] s [10,100,2,4] c
 
