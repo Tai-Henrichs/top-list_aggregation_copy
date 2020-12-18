@@ -7,7 +7,7 @@ python3, numpy, scipy, pulp, and Gurobi. We recommend running the following comm
 	
 	python -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 	pip install pulp
-And downlaoding+obtaining an academic license for the Gurobi LIP solver on you machine from https://www.gurobi.com/
+And downloading and securing an academic license for the Gurobi LIP solver on your machine from https://www.gurobi.com/
 
 The different choices that we provide are:
 
