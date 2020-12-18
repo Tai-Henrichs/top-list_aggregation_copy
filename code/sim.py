@@ -16,37 +16,48 @@ This is the class in charge of taking arguments from user and calling
 appropriate functions.
 ------------------------------
 
+### What is this?
+A final project for Algorithmic Game Theory at Williams College where we, Ammar Eltigani and Tai Henrichs, implemented and compared a number of approximation algorithms and heuristics for the top-list aggregation problem. Read our paper in this repo!
+#### Requirements:
+python3, numpy, scipy, pulp, and Gurobi. We recommend running the following commands
+
+	python -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
+	pip install pulp
+And downloading and securing an academic license for the Gurobi LIP solver on your machine from https://www.gurobi.com/
+
 The different choices that we provide are:
+
     1. What dataset does the user want to use
         a. 's' (synthetic) for which we require the following arguments:
-
-                'n' : int 
+                'n' : int
                     the size of the full rankings lists (also the total
                     number of alternatives)
-                'N' : int 
+                'N' : int
                     the total number of partial lists to be generated
-                'theta' : float 
-                    the parameter that is passed to the Mallows Model that 
+                'theta' : float
+                    the parameter that is passed to the Mallows Model that
                     dictates the probability distribution (consensus)
-                'k' [optional] : int 
+                'k' [optional] : int
                     the distribution median (i.e. average candidates ranked)
                     across all voters)
                 's0' [optional] : int[]
-                    the ground list, which should order the n candidates 1,2,...,n
+                    the ground list, which should order the n candidates 0,1,...,n-1
+		'ep' (epsilon) If Score-Then-Adjust or Score-Then-Adjust Relaxed are part of the algorithms list, this parameter is required. Note: it gets passed with the algorithms list, not the parameters list
 
         b. 'r' (real), only requires a well formatted /path/to/file.CSV. By well
         formatted, we require that:
 
             i.  The first row has the number 'n' of alternatives
 
-            ii. The following 'n' rows only have two columns: the first is the i'th 
+            ii. The following 'n' rows only have two columns: the first is the i'th
                 candiate (int) and the second is a (str) describes the candiate
 
             iii.The n+2'nd row must have as its first column the total numbers
                 of voters N (size of the input)
-            
+
             iv. The top-lists being at line n+3, are newline separated from each other, and the
                 alternatives within each list are comman separated and ordered from left to right
+
 
     2. What algorithm(s) the user would like to use for top-list rank aggregation:
         a. 'FootRule+'
@@ -54,27 +65,43 @@ The different choices that we provide are:
         c. 'Borda+'
         d. 'Score-Then-Borda+'
         e. 'Score-Then-Adjust'
+        f. 'Local-Search'
+        g. 'Relaxed-Linear-Program'
+        h. 'Score-Then-Adjust-Relaxed'
+        i. 'Copeland'
+        j. 'Chanas"
+        k. 'QS-Rand'
+        l. 'QS-Det'
+        m. 'IS'
+        n. 'Opt'
 
-    3. An optinal seed argument. If provided, all random number generation will utilize the given seed. By default, 
-        random number generation will utilize the system's internal clock. 
+
+    3. Whether to run combinations of algorithms 'c' or not 'nc'. Combinations entails running Chanas and Local-Search as a postprocessing step for all algorithms (except opt).
+
+    4. An optinal seed argument. If provided, all random number generation will utilize the given seed. By default,
+        random number generation will utilize the system's internal clock.
 
     -------------------------------
 
-Usage: python3 sim.py [algo1,algo2,...] [s <OR> r] [<if s> n,N,theta,k] [<if s> s0] [<if r>: path/to/file.CSV] [c <OR> nc] seed 
+#### Usage:
 
-Examples:
+		python3 sim.py [algo1,algo2,...,epsilon] s [n,N,theta,k] s0[OPTIONAL] c<OR>nc seed[OPTIONAL]
+		python3 sim.py [algo,algo2,...] r FILEPATH c<OR>nc seed[OPTIONAL]
 
-    python3 sim.py [OPTIMAL] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] 0
+#### Examples:
 
-    python3 sim.py [RandomSort,Borda+,FootRule+] s [10,100,2,4] 
+    python3 sim.py [Opt] s [10,100,0.5,3] [8,4,6,1,2,9,3,7,5,10] nc 0
 
-    python3 sim.py [FootRule+] r ../data/soi/ED-00001-00000001.csv
+    python3 sim.py [Chanas,RandomSort,Borda+,FootRule+] s [10,100,2,4] c
 
-    python3 sim.py [Score-Then-Adjust,0.2,0.4,0.5,Score-Then-Borda+] s [5,50,0.5]
+    python3 sim.py [FootRule+] r ../data/soi/ED-00001-00000001.csv nc
+
+    python3 sim.py [Score-Then-Adjust,0.2,0.4,0.5,Score-Then-Borda+] s [5,50,0.5] nc 25
+
+#### Reproducing
+If you are brave and for some reason want to reproduce the same plots shown in our paper (also available in the 'Visualizations' directory), run run_experiments.py and then try using search.py, numpyfy.py, and visualizations.py to make things look nice.
+
 """
-
-# documentation for the follwing code is a little informal at the moment but will iteratively be
-# improved as the program develops
 
 class Simulation:
 
@@ -411,7 +438,6 @@ class Simulation:
 if __name__ == '__main__':
     if not (3 <= len(sys.argv) <=  6):
         print(f"Too many arguments! Expected 3 to 6 arguments, got {len(sys.argv)}. See usage:")
-        print("python3 sim.py [algo1,algo2,...] [s <OR> r]  [<if s> n,N,theta,k]  [<if s> s0]  [<if r>: path/to/file.CSV] seed")
     else:
         sim = Simulation()
         sim.main(sys.argv[1:])
