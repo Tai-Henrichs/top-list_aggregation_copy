@@ -1,7 +1,7 @@
 # CS 357 Final Project Repository: A Study of Top-Lists Aggregation Methods
 
 ### What is this?
-A final project for Algorithmic Game Theory at Williams College where we, Ammar Eltigani and Tai Henrichs, implemented and compared a bunch of approximation algorithms to the top-list aggregation problem. Read our paper in this repo!
+A final project for Algorithmic Game Theory at Williams College where we, Ammar Eltigani and Tai Henrichs, implemented and compared a number of approximation algorithms and heuristics for the top-list aggregation problem. Read our paper in this repo!
 #### Requirements: 
 python3, numpy, scipy, pulp, and Gurobi. We recommend running the following commands
 	
