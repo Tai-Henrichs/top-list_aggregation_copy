@@ -26,7 +26,7 @@ The different choices that we provide are:
                     across all voters)
                 's0' [optional] : int[]
                     the ground list, which should order the n candidates 0,1,...,n-1
-				'ep' (epsilon) If Score-Then-Adjust or Score-Then-Adjust Relaxed are part of the algorithms list, this parameter is required. Note: it gets passed with the algorithms list, not the parameters list
+		'ep' (epsilon) If Score-Then-Adjust or Score-Then-Adjust Relaxed are part of the algorithms list, this parameter is required. Note: it gets passed with the algorithms list, not the parameters list
 
         b. 'r' (real), only requires a well formatted /path/to/file.CSV. By well
         formatted, we require that:
