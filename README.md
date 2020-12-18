@@ -7,7 +7,7 @@ python3, numpy, scipy, pulp, and Gurobi. We recommend running the following comm
 	
 	python -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 	pip install pulp
-And obtaining an academic license for the Gurobi LIP solver on you machine at https://www.gurobi.com/
+And downlaoding+obtaining an academic license for the Gurobi LIP solver on you machine from https://www.gurobi.com/
 
 The different choices that we provide are:
 
@@ -68,7 +68,7 @@ The different choices that we provide are:
 #### Usage: 
 
 		python3 sim.py [algo1,algo2,...,epsilon] s [n,N,theta,k] s0[OPTIONAL] c<OR>nc seed
-		python3 sim.py [algo,algo2,...] r FILEPATH c
+		python3 sim.py [algo,algo2,...] r FILEPATH c<OR>nc seed
 
 #### Examples:
 
