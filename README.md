@@ -67,8 +67,8 @@ The different choices that we provide are:
 
 #### Usage: 
 
-		python3 sim.py [algo1,algo2,...,epsilon] s [n,N,theta,k] s0[OPTIONAL] c<OR>nc seed
-		python3 sim.py [algo,algo2,...] r FILEPATH c<OR>nc seed
+		python3 sim.py [algo1,algo2,...,epsilon] s [n,N,theta,k] s0[OPTIONAL] c<OR>nc seed[OPTIONAL]
+		python3 sim.py [algo,algo2,...] r FILEPATH c<OR>nc seed[OPTIONAL]
 
 #### Examples:
 
