@@ -2,9 +2,9 @@
 
 ### What is this?
 A final project for Algorithmic Game Theory at Williams College where we, Ammar Eltigani and Tai Henrichs, implemented and compared a number of approximation algorithms and heuristics for the top-list aggregation problem. Read our paper in this repo!
-#### Requirements: 
+#### Requirements:
 python3, numpy, scipy, pulp, and Gurobi. We recommend running the following commands
-	
+
 	python -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 	pip install pulp
 And downloading and securing an academic license for the Gurobi LIP solver on your machine from https://www.gurobi.com/
@@ -13,15 +13,15 @@ The different choices that we provide are:
 
     1. What dataset does the user want to use
         a. 's' (synthetic) for which we require the following arguments:
-                'n' : int 
+                'n' : int
                     the size of the full rankings lists (also the total
                     number of alternatives)
-                'N' : int 
+                'N' : int
                     the total number of partial lists to be generated
-                'theta' : float 
-                    the parameter that is passed to the Mallows Model that 
+                'theta' : float
+                    the parameter that is passed to the Mallows Model that
                     dictates the probability distribution (consensus)
-                'k' [optional] : int 
+                'k' [optional] : int
                     the distribution median (i.e. average candidates ranked)
                     across all voters)
                 's0' [optional] : int[]
@@ -33,12 +33,12 @@ The different choices that we provide are:
 
             i.  The first row has the number 'n' of alternatives
 
-            ii. The following 'n' rows only have two columns: the first is the i'th 
+            ii. The following 'n' rows only have two columns: the first is the i'th
                 candiate (int) and the second is a (str) describes the candiate
 
             iii.The n+2'nd row must have as its first column the total numbers
                 of voters N (size of the input)
-            
+
             iv. The top-lists being at line n+3, are newline separated from each other, and the
                 alternatives within each list are comman separated and ordered from left to right
 
@@ -57,15 +57,15 @@ The different choices that we provide are:
         l. 'QS-Det'
         m. 'IS'
         n. 'Opt'
-        
+
 	3. Whether to run combinations of algorithms 'c' or not 'nc'. Combinations entails running Chanas and Local-Search as a postprocessing step for all algorithms (except opt).
-	
-    4. An optinal seed argument. If provided, all random number generation will utilize the given seed. By default, 
-        random number generation will utilize the system's internal clock. 
+
+    4. An optinal seed argument. If provided, all random number generation will utilize the given seed. By default,
+        random number generation will utilize the system's internal clock.
 
     -------------------------------
 
-#### Usage: 
+#### Usage:
 
 		python3 sim.py [algo1,algo2,...,epsilon] s [n,N,theta,k] s0[OPTIONAL] c<OR>nc seed[OPTIONAL]
 		python3 sim.py [algo,algo2,...] r FILEPATH c<OR>nc seed[OPTIONAL]
@@ -79,7 +79,6 @@ The different choices that we provide are:
     python3 sim.py [FootRule+] r ../data/soi/ED-00001-00000001.csv nc
 
     python3 sim.py [Score-Then-Adjust,0.2,0.4,0.5,Score-Then-Borda+] s [5,50,0.5] nc 25
-    
-#### Reproducing
-If you are brave and for some reason want to reproduce the same plots shown in our paper (also available in the 'Visualizations' directory), run <code>run_experiments.py</code> and then try using <code>search.py</code>, <code>numpyfy.py</code>, and <code>visualizations.py</code> to make things look nice.
 
+#### Reproducing
+If you want to confirm the plots in our paper (also available in the 'Data Visualizations' directory), run <code>run_experiments.py</code> and <code>visualizations.py</code> to confirm matching results.
